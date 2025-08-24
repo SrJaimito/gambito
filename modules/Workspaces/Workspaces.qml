@@ -6,80 +6,58 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.config
+import qs.components.Label
 
 
 WrapperRectangle {
-    property int workspaceSpacing
-    property string focusColor
+    id: root
 
-    leftMargin: 0
-    topMargin: -2
-    bottomMargin: -2
-    rightMargin: 15
+    readonly property int numberOfWorkspaces: 10
 
-    radius: LookAndFeel.rounding.full
+    property alias workspaceSpacing: workspaces.spacing
+
+    property string focusColor: LookAndFeel.color.sapphire
+
+    leftMargin: LookAndFeel.spacing.large
+    rightMargin: LookAndFeel.spacing.small
+    
+    topRightRadius: LookAndFeel.rounding.full
+    bottomRightRadius: LookAndFeel.rounding.full
 
     color: LookAndFeel.color.surface_0
 
     RowLayout {
-        spacing: workspaceSpacing
+        id: workspaces
 
-        function setWorkspaceIcon(index): string {
-            let workspaces = Hyprland.workspaces.values;
-            for (let i = 0; i < workspaces.length; i++) {
-                if (workspaces[i].id === index + 1) {
-                    if (workspaces[i].focused) {
-                        return "\uea71";
-                    } else if (workspaces[i].toplevels.values.length > 0) {
-                        return "\uf192";
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            return "\ueabc";
-        }
-
-        WrapperMouseArea {
-            margin: 0
-
-            cursorShape: Qt.PointingHandCursor
-            onClicked: console.log("Hola")
-
-            WrapperRectangle {
-                leftMargin: 5
-                rightMargin: 5
-                topMargin: -6
-                bottomMargin: -6
-
-                radius: LookAndFeel.rounding.full
-
-                color: focusColor
-
-                Text {
-                    text: "\u{f08c7}"
-
-                    font.pixelSize: LookAndFeel.fontSize.huge
-                    font.family: LookAndFeel.fontFamily.mono
-
-                    color: LookAndFeel.color.crust
-                }
-            }
-        }
-
+        spacing: LookAndFeel.spacing.normal
+        
         Repeater {
-            model: totalWorkspaces
+            model: root.numberOfWorkspaces
 
-            delegate: Text {
-                text: parent.setWorkspaceIcon(index)
+            delegate: Label {
+                text: {
+                    let hyprWorkspaces = Hyprland.workspaces.values;
+                    for (let i = 0; i < hyprWorkspaces.length; i++) {
+                        if (hyprWorkspaces[i].id === index + 1) {
+                            if (hyprWorkspaces[i].focused) {
+                                return "\uea71";
+                            } else if (hyprWorkspaces[i].toplevels.values.length > 0) {
+                                return "\uf192";
+                            } else {
+                                break;
+                            }
+                        }
+                    }
 
-                font.pixelSize: LookAndFeel.fontSize.large
-                font.family: LookAndFeel.fontFamily.mono
+                    return "\ueabc";
+                }
 
-                color: Hyprland.focusedWorkspace.id === index + 1 ?
-                focusColor : LookAndFeel.color.text
+                fontFamily: LookAndFeel.fontFamily.mono
+                fontSize: LookAndFeel.fontSize.large
+
+                color: Hyprland.focusedWorkspace.id === index + 1 ? root.focusColor : LookAndFeel.color.text
             }
         }
     }
 }
+
