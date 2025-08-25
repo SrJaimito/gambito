@@ -122,7 +122,6 @@ Shape {
     layer.effect: MultiEffect {
         shadowEnabled: true
         shadowColor: "black"
-        shadowBlur: 0.5
     }
 }
 
