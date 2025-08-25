@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import QtQuick.Effects
 
 import qs.config
 
@@ -115,6 +116,13 @@ Shape {
             x: 0
             relativeY: 0
         }
+    }
+
+    layer.enabled: true
+    layer.effect: MultiEffect {
+        shadowEnabled: true
+        shadowColor: "black"
+        shadowBlur: 0.5
     }
 }
 
