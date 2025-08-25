@@ -12,7 +12,9 @@ WrapperMouseArea {
 
     margin: 0
 
+    enabled: true
     cursorShape: Qt.PointingHandCursor
+    onClicked: UserControl.mainMenuIsVisible = !UserControl.mainMenuIsVisible;
 
     WrapperRectangle {
         id: circle

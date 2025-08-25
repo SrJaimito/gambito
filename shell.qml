@@ -3,6 +3,7 @@ import Quickshell
 import QtQuick
 
 import qs.widgets.Bar
+import qs.widgets.MainMenu
 
 
 PanelWindow {
@@ -20,20 +21,19 @@ PanelWindow {
     exclusiveZone: barHeight
 
     mask: Region {
-        item: Rectangle {
-            anchors {
-                left: root.left
-                right: root.right
-                bottom: root.bottom
-            }
+        x: 0
+        y: bar.height
+        width: root.width
+        height: root.height - bar.height
 
-            height: root.height - root.barHeight
-        }
+        intersection: Intersection.Xor
     }
 
     color: "transparent"
 
     Bar {
+        id: bar
+
         anchors {
             left: parent.left
             right: parent.right
@@ -41,6 +41,11 @@ PanelWindow {
         }
 
         implicitHeight: root.barHeight
+    }
+
+    MainMenu {
+        bar: bar
+        z: -10
     }
 }
 
