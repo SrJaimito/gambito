@@ -14,7 +14,7 @@ Item {
 
     Shape {
         bar: parent
-        leftGroupWidth: leftGroup.width + root.padding
+        leftGroupWidth: leftGroup.width
         centerGroupWidth: centerGroup.width
         rightGroupWidth: rightGroup.width + root.padding
     }
