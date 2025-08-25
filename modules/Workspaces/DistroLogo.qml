@@ -22,7 +22,7 @@ WrapperMouseArea {
 
         radius: LookAndFeel.rounding.full
 
-        color: LookAndFeel.color.sapphire
+        color: UserConfig.barHighlightColor
 
         Label {
             text: "\u{f08c7}"
