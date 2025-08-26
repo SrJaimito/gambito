@@ -4,6 +4,7 @@ import QtQuick
 
 import qs.widgets.Bar
 import qs.widgets.MainMenu
+import qs.components.CircleButton
 
 
 PanelWindow {
