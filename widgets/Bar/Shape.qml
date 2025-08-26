@@ -119,6 +119,7 @@ Shape {
     }
 
     layer.enabled: true
+    layer.samples: 6
     layer.effect: MultiEffect {
         shadowEnabled: true
         shadowColor: "black"
