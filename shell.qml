@@ -37,7 +37,7 @@ PanelWindow {
     Variants {
         id: widgetRegions
 
-        model: [bar, mainMenu, audioMenu]
+        model: [bar, mainMenu]
 
         Region {
             required property Item modelData
@@ -65,13 +65,6 @@ PanelWindow {
 
     MainMenu {
         id: mainMenu
-
-        bar: bar
-        z: -10
-    }
-
-    AudioMenu {
-        id: audioMenu
 
         bar: bar
         z: -10
