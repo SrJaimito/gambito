@@ -25,18 +25,23 @@ Shape {
         }
 
         PathArc {
-            relativeX: -root.container.height / 3
-            relativeY: root.container.height / 3
-            radiusX: root.container.height / 3
-            radiusY: root.container.height / 3
+            relativeX: -LookAndFeel.rounding.small
+            relativeY: LookAndFeel.rounding.small
+            radiusX: LookAndFeel.rounding.small
+            radiusY: LookAndFeel.rounding.small
             direction: PathArc.Counterclockwise
         }
 
+        PathLine {
+            relativeX: 0
+            relativeY: root.container.height - LookAndFeel.rounding.normal - LookAndFeel.rounding.small
+        }
+
         PathArc {
-            relativeX: -root.container.height * 2 / 3
-            relativeY: root.container.height * 2 / 3
-            radiusX: root.container.height * 2 / 3
-            radiusY: root.container.height * 2 / 3
+            relativeX: -LookAndFeel.rounding.normal
+            relativeY: LookAndFeel.rounding.normal
+            radiusX: LookAndFeel.rounding.normal
+            radiusY: LookAndFeel.rounding.normal
         }
 
         PathLine {

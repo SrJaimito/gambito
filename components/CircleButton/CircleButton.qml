@@ -15,6 +15,8 @@ WrapperMouseArea {
     
     property string fgColor: LookAndFeel.color.crust
     property string bgColor: UserConfig.barHighlightColor
+    property string fgColorHover: UserConfig.barHighlightColor
+    property string bgColorHover: LookAndFeel.color.surface_0
 
     property real radialPadding: 15
 
@@ -22,10 +24,11 @@ WrapperMouseArea {
 
     enabled: true
     hoverEnabled: true
+    cursorShape: Qt.PointingHandCursor
 
     onEntered: {
-        label.color = root.bgColor;
-        circle.fillColor = root.fgColor;
+        label.color = root.fgColorHover;
+        circle.fillColor = root.bgColorHover;
     }
 
     onExited: {

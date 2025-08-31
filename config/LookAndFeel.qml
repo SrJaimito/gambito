@@ -27,10 +27,13 @@ Singleton {
     }
 
     component Rounding: QtObject {
+        readonly property int small: 10
+        readonly property int normal: 20
         readonly property int full: 1000
     }
 
     component Spacing: QtObject {
+        readonly property int tiny: 5
         readonly property int small: 10
         readonly property int normal: 20
         readonly property int large: 30

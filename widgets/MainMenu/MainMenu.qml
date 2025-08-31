@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.components.Label
+import qs.components.CircleButton
 import qs.config
 
 
@@ -13,8 +14,8 @@ Item {
 
     required property Item bar
 
-    implicitWidth: buttons.implicitWidth + implicitHeight
-    implicitHeight: 30
+    implicitWidth: buttons.implicitWidth + 10
+    implicitHeight: buttons.implicitHeight
 
     anchors {
         top: bar.bottom
@@ -31,28 +32,13 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
 
-        leftMargin: LookAndFeel.spacing.normal
+        leftMargin: LookAndFeel.spacing.small
+        rightMargin: LookAndFeel.spacing.small
+        topMargin: LookAndFeel.spacing.tiny
+        bottomMargin: LookAndFeel.spacing.tiny
 
-        RowLayout {
-            spacing: LookAndFeel.spacing.normal
-            
-            Label {
-                text: "\uf456"
-                fontSize: LookAndFeel.fontSize.normal
-                color: LookAndFeel.color.crust
-            }
-            
-            Label {
-                text: "\u{f0fc5}"
-                fontSize: LookAndFeel.fontSize.normal
-                color: LookAndFeel.color.crust
-            }
-            
-            Label {
-                text: "\uf011"
-                fontSize: LookAndFeel.fontSize.normal
-                color: LookAndFeel.color.crust
-            }
+        Buttons {
+            spacing: LookAndFeel.spacing.small
         }
     }
 
