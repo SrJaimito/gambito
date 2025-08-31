@@ -7,6 +7,6 @@ import Quickshell
 Singleton {
     id: root
 
-    property string barHighlightColor: LookAndFeel.color.flamingo
+    property string barHighlightColor: LookAndFeel.color.teal
 }
 
