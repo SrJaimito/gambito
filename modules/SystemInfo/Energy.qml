@@ -16,6 +16,16 @@ RowLayout {
     spacing: LookAndFeel.spacing.normal
 
     Info {
+        function chooseColor() {
+            if (Energy.hasBattery && !Energy.isCharging) {
+                if (Energy.batteryLevel <= 20) {
+                    return LookAndFeel.color.red;
+                }
+            }
+
+            return LookAndFeel.color.text;
+        }
+
         icon: {
             if (!Energy.hasBattery) {
                 return "\u{f1425}";
@@ -40,17 +50,11 @@ RowLayout {
             }
         }
 
+        iconColor: chooseColor()
+
         info: Energy.batteryLevel + "%"
         infoVisible: Energy.hasBattery
-        infoColor: {
-            if (Energy.hasBattery && !Energy.isCharging) {
-                if (Energy.batteryLevel <= 20) {
-                    return LookAndFeel.color.red;
-                }
-            }
-
-            return LookAndFeel.color.text;
-        }
+        infoColor: chooseColor()
     }
 }
 
