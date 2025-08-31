@@ -4,6 +4,7 @@ import QtQuick
 
 import qs.widgets.Bar
 import qs.widgets.MainMenu
+import qs.widgets.AudioMenu
 
 
 PanelWindow {
@@ -36,7 +37,7 @@ PanelWindow {
     Variants {
         id: widgetRegions
 
-        model: [bar, mainMenu]
+        model: [bar, mainMenu, audioMenu]
 
         Region {
             required property Item modelData
@@ -64,6 +65,13 @@ PanelWindow {
 
     MainMenu {
         id: mainMenu
+
+        bar: bar
+        z: -10
+    }
+
+    AudioMenu {
+        id: audioMenu
 
         bar: bar
         z: -10
