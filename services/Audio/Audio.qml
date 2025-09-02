@@ -10,15 +10,18 @@ Singleton {
 
     property PwNode sink: Pipewire.defaultAudioSink
 
-    property int volume: parseVolumePercentage(sink.audio.volume)
     property bool isMuted: sink.audio.muted
 
     PwObjectTracker {
         objects: [sink]
     }
 
-    function parseVolumePercentage(volume): int {
-        return Math.round(volume * 100);
+    function getVolume(): int {
+        return Math.round(sink.audio.volume * 100);
+    }
+
+    function setVolume(volume) {
+        sink.audio.volume = Math.round(volume) / 100;
     }
 }
 
