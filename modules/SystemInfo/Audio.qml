@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Widgets
 
 import QtQuick
 import QtQuick.Layouts
@@ -15,22 +16,33 @@ RowLayout {
 
     spacing: LookAndFeel.spacing.normal
 
-    Info {
-        icon: {
-            if (Audio.isMuted) {
-                return "\ueee8";
-            }
+    WrapperMouseArea {
+        margin: 0
 
-            if (Audio.volume < 33) {
-                return "\uf026";
-            } else if (Audio.volume < 66) {
-                return "\uf027";
-            } else {
-                return "\uf028";
-            }
+        enabled: true
+        cursorShape: Qt.PointingHandCursor
+
+        onClicked: {
+            UserControl.audioMenuIsVisible = !UserControl.audioMenuIsVisible;
         }
 
-        info: Audio.volume + "%"
+        Info {
+            icon: {
+                if (Audio.isMuted) {
+                    return "\ueee8";
+                }
+
+                if (Audio.getVolume() < 33) {
+                    return "\uf026";
+                } else if (Audio.getVolume() < 66) {
+                    return "\uf027";
+                } else {
+                    return "\uf028";
+                }
+            }
+
+            info: Audio.getVolume() + "%"
+        }
     }
 }
 
