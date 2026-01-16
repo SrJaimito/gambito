@@ -12,9 +12,9 @@ Shape {
     required property int leftGroupWidth
     required property int centerGroupWidth
     required property int rightGroupWidth
+    required property double angle
 
     readonly property double cornerRadius: 20
-    readonly property double angle: 60
     readonly property double borderWidth: 10
 
     readonly property double angleRadians: angle * Math.PI / 180

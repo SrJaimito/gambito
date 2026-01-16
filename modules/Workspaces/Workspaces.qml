@@ -24,7 +24,7 @@ WrapperRectangle {
     topRightRadius: LookAndFeel.rounding.full
     bottomRightRadius: LookAndFeel.rounding.full
 
-    color: LookAndFeel.color.surface_0
+    color: LookAndFeel.color.surface_1
 
     RowLayout {
         id: workspaces
