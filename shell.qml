@@ -13,7 +13,7 @@ Scope {
 
     readonly property int topBarHeight: 40
     readonly property int screenBorder: 6
-    readonly property int sideBarLength: 80
+    readonly property int sideBarLength: 40
     readonly property double topBarAngle: 60
     readonly property double sideBarAngle: 40
 
