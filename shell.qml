@@ -3,8 +3,6 @@ import Quickshell
 import QtQuick
 
 import qs.bars.TopBar
-import qs.bars.RightBar
-import qs.bars.LeftBar
 import qs.bars.BottomBar
 
 
@@ -12,62 +10,60 @@ Scope {
     id: root
 
     readonly property int topBarHeight: 40
-    readonly property int screenBorder: 6
-    readonly property int sideBarLength: 40
-    readonly property double topBarAngle: 60
-    readonly property double sideBarAngle: 40
+    readonly property int topBarBorderWidth: 10
+    readonly property int topAndBottomBarSideBorderWidth: 6
+    readonly property int topAndBottomBarSideLength: 40
+    readonly property int topBarTransitionAngle: 60
+    readonly property int topAndBottomBarSideAngle: 40
+    readonly property int topBarGroupTransitionRadius: 15
 
     TopBar {
-        implicitHeight: root.topBarHeight
-        barAngle: root.topBarAngle
-    }
+        id: topBar
 
-    RightBar {
-        implicitWidth: 2 * root.screenBorder
-        length: root.sideBarLength
-        angle: root.sideBarAngle
-    }
+        barHeight: root.topBarHeight
+        topBorderWidth: root.topBarBorderWidth
+        sideBorderWidth: root.topAndBottomBarSideBorderWidth
+        sideLength: root.topAndBottomBarSideLength
+        
+        topAngle: root.topBarTransitionAngle
+        sideAngle: root.topAndBottomBarSideAngle
 
-    LeftBar {
-        implicitWidth: 2 * root.screenBorder
-        length: root.sideBarLength
-        angle: root.sideBarAngle
+        topGroupTransitionRadius: root.topBarGroupTransitionRadius
     }
 
     BottomBar {
-        implicitHeight: 2 * root.screenBorder
-        length: root.sideBarLength
-        angle: root.sideBarAngle
+        id: bottomBar
+
+        sideBorderWidth: root.topAndBottomBarSideBorderWidth
+        sideLength: root.topAndBottomBarSideLength
+        sideAngle: root.topAndBottomBarSideAngle
+    }
+
+    // Ghost side panels to create padding
+    PanelWindow {
+        anchors {
+            top: true
+            left: true
+            bottom: true
+        }
+
+        implicitWidth: root.topAndBottomBarSideBorderWidth
+        exclusiveZone: root.topAndBottomBarSideBorderWidth
+
+        color: "transparent"
+    }
+
+    PanelWindow {
+        anchors {
+            top: true
+            right: true
+            bottom: true
+        }
+
+        implicitWidth: root.topAndBottomBarSideBorderWidth
+        exclusiveZone: root.topAndBottomBarSideBorderWidth
+
+        color: "transparent"
     }
 }
-
-// PanelWindow {
-//     id: root
-// 
-//     readonly property int topBarHeight: 40
-//     readonly property int screenBorder: 10
-// 
-//     anchors {
-//         top: true
-//         left: true
-//         right: true
-//     }
-// 
-//     implicitHeight: screen.height
-//     exclusiveZone: topBarHeight
-// 
-//     color: "transparent"
-// 
-//     TopBar {
-//         id: topBar
-// 
-//         anchors {
-//             left: parent.left
-//             right: parent.right
-//             top: parent.top
-//         }
-// 
-//         implicitHeight: root.topBarHeight
-//     }
-// }
 

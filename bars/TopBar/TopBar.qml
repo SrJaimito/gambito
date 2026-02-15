@@ -7,10 +7,19 @@ import qs.modules.Workspaces
 import qs.modules.DateTime
 import qs.modules.SystemInfo
 
+
 PanelWindow {
     id: root
 
-    required property double barAngle
+    required property int barHeight
+    required property int topBorderWidth
+    required property int sideBorderWidth
+    required property int sideLength
+    
+    required property int topAngle
+    required property int sideAngle
+
+    required property int topGroupTransitionRadius
 
     readonly property int padding: LookAndFeel.spacing.small
 
@@ -20,24 +29,38 @@ PanelWindow {
         right: true
     }
 
+    implicitHeight: barHeight + sideLength + LookAndFeel.spacing.normal
+    exclusiveZone: barHeight
+
     color: "transparent"
 
     Shape {
         bar: parent
+
+        barHeight: root.barHeight
+        topBorderWidth: root.topBorderWidth
+        sideBorderWidth: root.sideBorderWidth
+        sideLength: root.sideLength
+
         leftGroupWidth: leftGroup.width
         centerGroupWidth: centerGroup.width
         rightGroupWidth: rightGroup.width + root.padding
-        angle: root.barAngle
+
+        topAngle: root.topAngle
+        sideAngle: root.sideAngle
+
+        topGroupTransitionRadius: root.topGroupTransitionRadius
     }
 
     Item {
         id: leftGroup
 
         implicitWidth: distroLogo.width / 2 + workspaces.width
+        implicitHeight: root.barHeight
 
         anchors {
             left: parent.left
-            verticalCenter: parent.verticalCenter
+            top: parent.top
         }
 
         Workspaces {
@@ -63,7 +86,11 @@ PanelWindow {
     DateTime {
         id: centerGroup
 
-        anchors.centerIn: parent
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: root.padding
+        }
     }
 
     SystemInfo {
@@ -71,8 +98,9 @@ PanelWindow {
 
         anchors {
             right: parent.right
-            verticalCenter: parent.verticalCenter
+            top: parent.top
             rightMargin: root.padding
+            topMargin: root.padding
         }
     }
 }

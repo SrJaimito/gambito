@@ -9,11 +9,12 @@ Shape {
     id: root
 
     required property Item bar
-    required property int screenBorder
-    required property int length
-    required property double angle
 
-    readonly property double angleRad: angle * Math.PI / 180
+    required property int sideBorderWidth
+    required property int sideLength
+    required property int sideAngle
+
+    readonly property double sideAngleRad: sideAngle * Math.PI / 180
 
     anchors.fill: bar
 
@@ -22,36 +23,54 @@ Shape {
         strokeWidth: -1
 
         startX: 0
-        startY: 0
+        startY: root.bar.height - (root.sideLength + root.sideBorderWidth)
+
+        // Shape left side
+        PathLine {
+            relativeX: root.sideBorderWidth * Math.sin(root.sideAngleRad)
+            relativeY: root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
+        }
 
         PathArc {
-            relativeX: root.screenBorder
-            relativeY: root.screenBorder
-            radiusX: root.screenBorder
-            radiusY: root.screenBorder
+            relativeX: root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
+            relativeY: root.sideBorderWidth * Math.cos(root.sideAngleRad)
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
+        }
+
+        PathLine {
+            relativeX: 0
+            y: root.bar.height - root.sideBorderWidth * 2
+        }
+
+        PathArc {
+            relativeX: root.sideBorderWidth
+            relativeY: root.sideBorderWidth
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
             direction: PathArc.Counterclockwise
         }
 
         PathLine {
-            relativeX: root.length
+            relativeX: root.sideLength - root.sideBorderWidth * (1 + Math.cos(root.sideAngleRad) + Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad))
             relativeY: 0
         }
 
         PathArc {
-            relativeX: root.screenBorder * Math.cos(root.angleRad)
-            relativeY: root.screenBorder * (1 - Math.sin(root.angleRad))
-            radiusX: root.screenBorder
-            radiusY: root.screenBorder
+            relativeX: root.sideBorderWidth * Math.cos(root.sideAngleRad)
+            relativeY: root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
         }
 
         PathLine {
-            relativeX: root.screenBorder * Math.tan(root.angleRad) * Math.sin(root.angleRad)
+            relativeX: root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
             y: root.bar.height
         }
 
         PathLine {
             x: 0
-            relativeY: 0
+            y: root.bar.height
         }
     }
 
@@ -60,36 +79,55 @@ Shape {
         strokeWidth: -1
 
         startX: root.bar.width
-        startY: 0
+        startY: root.bar.height - (root.sideLength + root.sideBorderWidth)
 
-        PathArc {
-            relativeX: -root.screenBorder
-            relativeY: root.screenBorder
-            radiusX: root.screenBorder
-            radiusY: root.screenBorder
-        }
-
+        // Shape right side
         PathLine {
-            relativeX: -root.length
-            relativeY: 0
+            relativeX: -root.sideBorderWidth * Math.sin(root.sideAngleRad)
+            relativeY: root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
         }
 
         PathArc {
-            relativeX: -root.screenBorder * Math.cos(root.angleRad)
-            relativeY: root.screenBorder * (1 - Math.sin(root.angleRad))
-            radiusX: root.screenBorder
-            radiusY: root.screenBorder
+            relativeX: -root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
+            relativeY: root.sideBorderWidth * Math.cos(root.sideAngleRad)
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
             direction: PathArc.Counterclockwise
         }
 
         PathLine {
-            relativeX: -root.screenBorder * Math.tan(root.angleRad) * Math.sin(root.angleRad)
+            relativeX: 0
+            y: root.bar.height - root.sideBorderWidth * 2
+        }
+
+        PathArc {
+            relativeX: -root.sideBorderWidth
+            relativeY: root.sideBorderWidth
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
+        }
+
+        PathLine {
+            relativeX: -root.sideLength + root.sideBorderWidth * (1 + Math.cos(root.sideAngleRad) + Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad))
+            relativeY: 0
+        }
+
+        PathArc {
+            relativeX: -root.sideBorderWidth * Math.cos(root.sideAngleRad)
+            relativeY: root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
+            radiusX: root.sideBorderWidth
+            radiusY: root.sideBorderWidth
+            direction: PathArc.Counterclockwise
+        }
+
+        PathLine {
+            relativeX: -root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
             y: root.bar.height
         }
 
         PathLine {
             x: root.bar.width
-            relativeY: 0
+            y: root.bar.height
         }
     }
 

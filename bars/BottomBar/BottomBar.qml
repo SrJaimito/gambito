@@ -8,8 +8,9 @@ import qs.config
 PanelWindow {
     id: root
 
-    required property int length
-    required property double angle
+    required property int sideBorderWidth
+    required property int sideLength
+    required property int sideAngle
 
     anchors {
         bottom: true
@@ -17,15 +18,17 @@ PanelWindow {
         right: true
     }
 
-    exclusiveZone: height / 2
+    implicitHeight: sideBorderWidth + sideLength + LookAndFeel.spacing.normal
+    exclusiveZone: sideBorderWidth
 
     color: "transparent"
 
     Shape {
         bar: parent
-        screenBorder: height / 2
-        length: root.length
-        angle: root.angle
+
+        sideBorderWidth: root.sideBorderWidth
+        sideLength: root.sideLength
+        sideAngle: root.sideAngle
     }
 }
 

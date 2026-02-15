@@ -37,7 +37,7 @@ Singleton {
         readonly property int small: 10
         readonly property int normal: 20
         readonly property int large: 30
-        readonly property int hueg: 40
+        readonly property int huge: 40
     }
 
     component Color: QtObject {
