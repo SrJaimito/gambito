@@ -17,10 +17,10 @@ RowLayout {
 
     Info {
         function chooseColor() {
-            if (Energy.hasBattery && !Energy.isCharging) {
-                if (Energy.batteryLevel <= 20) {
-                    return LookAndFeel.color.red;
-                }
+            if (Energy.isCharging) {
+                return LookAndFeel.color.green;
+            } else if (Energy.hasBattery && Energy.batteryLevel <= 20) {
+                return LookAndFeel.color.red;
             }
 
             return LookAndFeel.color.text;
