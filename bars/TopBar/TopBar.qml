@@ -29,8 +29,30 @@ PanelWindow {
         right: true
     }
 
+    // We make the bar bigger to be able to draw sides and cast shadows
     implicitHeight: barHeight + sideLength + LookAndFeel.spacing.normal
+    // but later we reserve space for the actual top bar only
     exclusiveZone: barHeight
+
+    // We must, however, make the part below the actual bar non-clickable
+    mask: Region {
+        item: clickthrough_mask
+        intersection: Intersection.Xor
+    }
+
+    Rectangle {
+        id: clickthrough_mask
+
+        width: root.width - 2 * root.sideBorderWidth
+        height: root.height - root.barHeight
+
+        anchors {
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        color: "transparent"
+    }
 
     color: "transparent"
 
