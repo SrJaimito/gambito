@@ -42,12 +42,11 @@ Scope {
     // Ghost side panels to create padding
     PanelWindow {
         anchors {
-            top: true
             left: true
-            bottom: true
         }
 
         implicitWidth: root.topAndBottomBarSideBorderWidth
+        implicitHeight: 50
         exclusiveZone: root.topAndBottomBarSideBorderWidth
 
         color: "transparent"
@@ -55,12 +54,11 @@ Scope {
 
     PanelWindow {
         anchors {
-            top: true
             right: true
-            bottom: true
         }
 
         implicitWidth: root.topAndBottomBarSideBorderWidth
+        implicitHeight: 50
         exclusiveZone: root.topAndBottomBarSideBorderWidth
 
         color: "transparent"
