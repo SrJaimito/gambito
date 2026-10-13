@@ -10,17 +10,18 @@ Singleton {
 
     property UPowerDevice device: UPower.displayDevice
 
-    property bool hasBattery: device.type === UPowerDeviceType.Battery
+    // The display device can be null, e.g. while UPower is starting up
+    property bool hasBattery: device?.type === UPowerDeviceType.Battery
     property int batteryLevel: getBatteryLevel()
     property bool isCharging: isChargingOrCharged()
 
     function getBatteryLevel() {
-        return Math.round(device.percentage * 100);
+        return Math.round((device?.percentage ?? 0) * 100);
     }
 
     function isChargingOrCharged() {
-        return device.state === UPowerDeviceState.FullyCharged
-                || device.state === UPowerDeviceState.Charging;
+        return device?.state === UPowerDeviceState.FullyCharged
+                || device?.state === UPowerDeviceState.Charging;
     }
 }
 
