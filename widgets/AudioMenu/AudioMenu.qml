@@ -8,63 +8,78 @@ import qs.services.Audio
 import qs.config
 
 
-Item {
+PanelWindow {
     id: root
 
-    required property Item bar
+    required property int barHeight
+
+    readonly property bool open: UserControl.audioMenuIsVisible
 
     anchors {
-        top: bar.bottom
-        right: bar.right
-        rightMargin: UserControl.audioMenuIsVisible ? 0 : -implicitWidth
+        top: true
+        right: true
     }
 
-    implicitWidth: slider.implicitWidth + 10
-    implicitHeight: Math.max(slider.implicitHeight, 30)
+    // Sit right below the bar instead of being pushed by its exclusive zone
+    exclusionMode: ExclusionMode.Ignore
+    margins.top: barHeight
 
-    Shape {
-        container: root
-    }
+    implicitWidth: content.width
+    implicitHeight: content.height
 
-    WrapperItem {
-        id: slider
+    // Only mapped while open or sliding out, see the animation below
+    visible: false
+    onOpenChanged: if (open) visible = true
 
-        anchors {
-            right: parent.right
-            verticalCenter: parent.verticalCenter
+    color: "transparent"
+
+    Item {
+        id: content
+
+        implicitWidth: slider.implicitWidth + 10
+        implicitHeight: Math.max(slider.implicitHeight, 30)
+
+        // Slide in from the right edge of the screen
+        x: root.open ? 0 : width
+
+        Shape {
+            container: content
         }
 
-        leftMargin: LookAndFeel.spacing.normal
-        rightMargin: LookAndFeel.spacing.small
-        topMargin: LookAndFeel.spacing.tiny
-        bottomMargin: LookAndFeel.spacing.tiny
+        WrapperItem {
+            id: slider
 
-        Slider {
-            Component.onCompleted: {
-                initPosition = Audio.getVolume();
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
             }
 
-            handler: (volume) => {
-                Audio.setVolume(volume);
-            }
-        }
-    }
+            leftMargin: LookAndFeel.spacing.normal
+            rightMargin: LookAndFeel.spacing.small
+            topMargin: LookAndFeel.spacing.tiny
+            bottomMargin: LookAndFeel.spacing.tiny
 
-    Behavior on anchors.rightMargin {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.OutQuad
-            onStarted: {
-                if (!root.visible) {
-                    root.visible = true;
+            Slider {
+                Component.onCompleted: {
+                    initPosition = Audio.getVolume();
+                }
+
+                handler: (volume) => {
+                    Audio.setVolume(volume);
                 }
             }
-            onStopped: {
-                if (root.visible) {
-                    root.visible = false;
+        }
+
+        Behavior on x {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.OutQuad
+                onStopped: {
+                    if (!root.open) {
+                        root.visible = false;
+                    }
                 }
             }
         }
     }
 }
-

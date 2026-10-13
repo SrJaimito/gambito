@@ -2,61 +2,73 @@ import Quickshell
 import Quickshell.Widgets
 
 import QtQuick
-import QtQuick.Layouts
 
-import qs.components.Label
-import qs.components.CircleButton
 import qs.config
 
 
-Item {
+PanelWindow {
     id: root
 
-    required property Item bar
+    required property int barHeight
 
-    implicitWidth: buttons.implicitWidth + 10
-    implicitHeight: buttons.implicitHeight
+    readonly property bool open: UserControl.mainMenuIsVisible
 
     anchors {
-        top: bar.bottom
-        left: parent.left
-        leftMargin: UserControl.mainMenuIsVisible ? 0 : -implicitWidth
-    }
-    
-    Shape {
-        container: parent
+        top: true
+        left: true
     }
 
-    WrapperItem {
-        id: buttons
+    // Sit right below the bar instead of being pushed by its exclusive zone
+    exclusionMode: ExclusionMode.Ignore
+    margins.top: barHeight
 
-        anchors.verticalCenter: parent.verticalCenter
+    implicitWidth: content.width
+    implicitHeight: content.height
 
-        leftMargin: LookAndFeel.spacing.small
-        rightMargin: LookAndFeel.spacing.small
-        topMargin: LookAndFeel.spacing.tiny
-        bottomMargin: LookAndFeel.spacing.tiny
+    // Only mapped while open or sliding out, see the animation below
+    visible: false
+    onOpenChanged: if (open) visible = true
 
-        Buttons {
-            spacing: LookAndFeel.spacing.small
+    color: "transparent"
+
+    Item {
+        id: content
+
+        implicitWidth: buttons.implicitWidth + 10
+        implicitHeight: buttons.implicitHeight
+
+        // Slide in from the left edge of the screen
+        x: root.open ? 0 : -width
+
+        Shape {
+            container: content
         }
-    }
 
-    Behavior on anchors.leftMargin {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.OutQuad
-            onStarted: {
-                if (!root.visible) {
-                    root.visible = true;
-                }
+        WrapperItem {
+            id: buttons
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            leftMargin: LookAndFeel.spacing.small
+            rightMargin: LookAndFeel.spacing.small
+            topMargin: LookAndFeel.spacing.tiny
+            bottomMargin: LookAndFeel.spacing.tiny
+
+            Buttons {
+                spacing: LookAndFeel.spacing.small
             }
-            onStopped: {
-                if (root.visible) {
-                    root.visible = false;
+        }
+
+        Behavior on x {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.OutQuad
+                onStopped: {
+                    if (!root.open) {
+                        root.visible = false;
+                    }
                 }
             }
         }
     }
 }
-

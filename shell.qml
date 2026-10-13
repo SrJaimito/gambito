@@ -3,6 +3,8 @@ import Quickshell
 import QtQuick
 
 import qs.bars.TopBar
+import qs.widgets.MainMenu
+import qs.widgets.AudioMenu
 
 
 Scope {
@@ -22,5 +24,13 @@ Scope {
         topAngle: root.topBarTransitionAngle
 
         topGroupTransitionRadius: root.topBarGroupTransitionRadius
+    }
+
+    MainMenu {
+        barHeight: root.topBarHeight
+    }
+
+    AudioMenu {
+        barHeight: root.topBarHeight
     }
 }

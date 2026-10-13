@@ -26,16 +26,6 @@ WrapperMouseArea {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
-    onEntered: {
-        label.color = root.fgColorHover;
-        circle.fillColor = root.bgColorHover;
-    }
-
-    onExited: {
-        label.color = root.fgColor;
-        circle.fillColor = root.bgColor;
-    }
-
     Item {
         id: item
 
@@ -53,7 +43,7 @@ WrapperMouseArea {
             ShapePath {
                 id: circle
 
-                fillColor: root.bgColor
+                fillColor: root.containsMouse ? root.bgColorHover : root.bgColor
                 strokeWidth: -1
 
                 startX: 0
@@ -74,7 +64,7 @@ WrapperMouseArea {
 
             anchors.centerIn: parent
 
-            color: root.fgColor
+            color: root.containsMouse ? root.fgColorHover : root.fgColor
         }
     }
 }
