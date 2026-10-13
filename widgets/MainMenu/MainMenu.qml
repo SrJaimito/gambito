@@ -12,13 +12,8 @@ SlidingMenu {
     open: UserControl.mainMenuIsVisible
     onCloseRequested: UserControl.mainMenuIsVisible = false
 
-    contentWidth: buttons.implicitWidth + 10
+    contentWidth: buttons.implicitWidth
     contentHeight: buttons.implicitHeight
-
-    Shape {
-        container: root.contentItem
-        shadowMargin: root.shadowMargin
-    }
 
     WrapperItem {
         id: buttons
@@ -26,7 +21,7 @@ SlidingMenu {
         anchors.verticalCenter: parent.verticalCenter
 
         leftMargin: LookAndFeel.spacing.small
-        rightMargin: LookAndFeel.spacing.small
+        rightMargin: LookAndFeel.spacing.tiny
         topMargin: LookAndFeel.spacing.tiny
         bottomMargin: LookAndFeel.spacing.tiny
 

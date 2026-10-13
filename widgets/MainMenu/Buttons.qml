@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 
+import QtQuick
 import QtQuick.Layouts
 
 import qs.components.CircleButton
@@ -29,6 +30,25 @@ RowLayout {
         onClicked: {
             UserControl.mainMenuIsVisible = false;
             shutdown.running = true;
+        }
+    }
+
+    // Separate the session buttons from the settings one
+    Rectangle {
+        Layout.fillHeight: true
+        Layout.topMargin: 0
+        Layout.bottomMargin: 0
+        implicitWidth: 2
+
+        radius: LookAndFeel.rounding.full
+
+        color: LookAndFeel.color.surface_2
+    }
+
+    CircleButton {
+        text: "\uf013"
+        onClicked: {
+            // TODO: open the settings menu once it exists
         }
     }
 

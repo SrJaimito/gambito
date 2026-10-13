@@ -43,6 +43,8 @@ Scope {
 
         bar: topBar
         barHeight: root.topBarHeight
+        barAngle: root.topBarTransitionAngle
+        barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin
     }
 

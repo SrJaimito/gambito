@@ -18,7 +18,7 @@ WrapperMouseArea {
     property color fgColorHover: UserConfig.barHighlightColor
     property color bgColorHover: LookAndFeel.color.surface_0
 
-    property real radialPadding: 15
+    property real radialPadding: LookAndFeel.spacing.small
 
     margin: 0
 

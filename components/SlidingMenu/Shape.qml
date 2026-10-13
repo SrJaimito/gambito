@@ -10,8 +10,13 @@ Shape {
 
     required property Item container
 
-    // Extra room on the left and bottom for the shadow to be drawn into
+    // Extra room on the bottom and the slanted side for the shadow to be
+    // drawn into
     required property int shadowMargin
+
+    // The path is drawn with the slant on the left side. Mirrored, the slant
+    // ends up on the right side instead
+    required property bool mirrored
 
     // Same slant and corner radius as the top bar's group transitions
     required property int angle
@@ -30,8 +35,14 @@ Shape {
 
     anchors {
         fill: root.container
-        leftMargin: -root.shadowMargin
+        leftMargin: root.mirrored ? 0 : -root.shadowMargin
+        rightMargin: root.mirrored ? -root.shadowMargin : 0
         bottomMargin: -root.shadowMargin
+    }
+
+    transform: Scale {
+        xScale: root.mirrored ? -1 : 1
+        origin.x: root.width / 2
     }
 
     ShapePath {

@@ -9,6 +9,8 @@ PanelWindow {
 
     required property PanelWindow bar
     required property int barHeight
+    required property int barAngle
+    required property int barTransitionRadius
     required property int shadowMargin
 
     // Whether the menu should be shown. closeRequested() is emitted when the
@@ -16,26 +18,15 @@ PanelWindow {
     required property bool open
     signal closeRequested()
 
-    // Size of the menu itself, without the room for its shadow
+    // Size of the menu's content, without its slanted side and shadow
     required property real contentWidth
     required property real contentHeight
 
-    // Stick to the right edge of the screen instead of the left one
+    // Stick to the right edge of the screen instead of the left one. The
+    // slanted side is always the one away from the screen edge
     property bool alignRight: false
-    // Slide down from the bar instead of sideways from the screen edge
-    property bool slideDown: false
-    property int slideDuration: 500
 
-    // The item children are placed into, for shapes to draw around
-    readonly property Item contentItem: content
     default property alias contentData: content.data
-
-    // Parts of the window that take clicks, the whole menu by default
-    property list<Region> maskRegions: [
-        Region {
-            item: content
-        }
-    ]
 
     anchors {
         top: true
@@ -48,16 +39,37 @@ PanelWindow {
     margins.top: root.barHeight
 
     // We make the window bigger than the menu to have room for its shadow
-    // on the bottom and on the side away from the screen edge
-    implicitWidth: root.contentWidth + root.shadowMargin
-    implicitHeight: root.contentHeight + root.shadowMargin
+    // on the bottom and the slanted side
+    implicitWidth: menu.width + root.shadowMargin
+    implicitHeight: menu.height + root.shadowMargin
 
-    // but only the menu itself takes clicks
+    // but only the menu itself takes clicks. Regions can only be rectangles,
+    // so follow the slanted side with three strips instead of taking clicks
+    // on the empty area next to it
     mask: Region {
-        regions: root.maskRegions
+        Region {
+            x: menu.x + (root.alignRight ? menu.stripInset(0) : 0)
+            y: menu.y
+            width: menu.width - menu.stripInset(0)
+            height: menu.height / 3
+        }
+
+        Region {
+            x: menu.x + (root.alignRight ? menu.stripInset(1) : 0)
+            y: menu.y + menu.height / 3
+            width: menu.width - menu.stripInset(1)
+            height: menu.height / 3
+        }
+
+        Region {
+            x: menu.x + (root.alignRight ? menu.stripInset(2) : 0)
+            y: menu.y + 2 * menu.height / 3
+            width: menu.width - menu.stripInset(2)
+            height: menu.height / 3
+        }
     }
 
-    // Only mapped while open or sliding out, see hideIfClosed() below
+    // Only mapped while open or sliding out, see onYChanged below
     visible: false
     onOpenChanged: if (root.open) root.visible = true
 
@@ -72,50 +84,60 @@ PanelWindow {
         onCleared: root.closeRequested()
     }
 
+    // The menu body: the slanted side plus the content
     Item {
-        id: content
+        id: menu
 
-        // Hidden positions include the shadow margin so the shadow is tucked
-        // away too, instead of peeking out from under the bar
-        readonly property real shownX: root.alignRight ? root.shadowMargin : 0
-        readonly property real hiddenX: {
-            if (root.slideDown) {
-                return shownX;
-            }
+        // Hidden above the window, including the shadow margin so the shadow
+        // is tucked away too instead of peeking out from under the bar
+        readonly property real hiddenY: -(height + root.shadowMargin)
 
-            return root.alignRight ? shownX + width + root.shadowMargin : -(width + root.shadowMargin);
+        // How far the slanted side reaches into the i-th of three mask strips
+        function stripInset(i) {
+            return shape.slantWidth * (2 * i + 1) / 6;
         }
-        readonly property real hiddenY: root.slideDown ? -(height + root.shadowMargin) : 0
 
-        width: root.contentWidth
+        width: shape.slantWidth + root.contentWidth
         height: root.contentHeight
 
-        x: root.open ? shownX : hiddenX
+        x: root.alignRight ? root.shadowMargin : 0
+
+        // Slide down from under the bar's bottom edge
         y: root.open ? 0 : hiddenY
 
         // Unmap the window once fully slid out. Animations in a Behavior
         // don't emit stopped/finished, so watch the position instead
-        function hideIfClosed() {
-            if (!root.open && x === hiddenX && y === hiddenY) {
+        onYChanged: {
+            if (!root.open && y === hiddenY) {
                 root.visible = false;
-            }
-        }
-
-        onXChanged: hideIfClosed()
-        onYChanged: hideIfClosed()
-
-        Behavior on x {
-            NumberAnimation {
-                duration: root.slideDuration
-                easing.type: Easing.OutQuad
             }
         }
 
         Behavior on y {
             NumberAnimation {
-                duration: root.slideDuration
+                duration: 300
                 easing.type: Easing.OutQuad
             }
+        }
+
+        Shape {
+            id: shape
+
+            container: menu
+            shadowMargin: root.shadowMargin
+            mirrored: !root.alignRight
+
+            angle: root.barAngle
+            transitionRadius: root.barTransitionRadius
+        }
+
+        Item {
+            id: content
+
+            x: root.alignRight ? shape.slantWidth : 0
+
+            width: root.contentWidth
+            height: root.contentHeight
         }
     }
 }
