@@ -13,11 +13,8 @@ PanelWindow {
 
     required property int barHeight
     required property int topBorderWidth
-    required property int sideBorderWidth
-    required property int sideLength
     
     required property int topAngle
-    required property int sideAngle
 
     required property int topGroupTransitionRadius
 
@@ -29,8 +26,8 @@ PanelWindow {
         right: true
     }
 
-    // We make the bar bigger to be able to draw sides and cast shadows
-    implicitHeight: barHeight + sideLength + LookAndFeel.spacing.normal
+    // We make the bar bigger to be able to cast shadows
+    implicitHeight: barHeight + LookAndFeel.spacing.huge
     // but later we reserve space for the actual top bar only
     exclusiveZone: barHeight
 
@@ -43,7 +40,7 @@ PanelWindow {
     Rectangle {
         id: clickthrough_mask
 
-        width: root.width - 2 * root.sideBorderWidth
+        width: root.width
         height: root.height - root.barHeight
 
         anchors {
@@ -61,15 +58,12 @@ PanelWindow {
 
         barHeight: root.barHeight
         topBorderWidth: root.topBorderWidth
-        sideBorderWidth: root.sideBorderWidth
-        sideLength: root.sideLength
 
         leftGroupWidth: leftGroup.width
         centerGroupWidth: centerGroup.width
         rightGroupWidth: rightGroup.width + root.padding
 
         topAngle: root.topAngle
-        sideAngle: root.sideAngle
 
         topGroupTransitionRadius: root.topGroupTransitionRadius
     }

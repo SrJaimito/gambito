@@ -12,8 +12,6 @@ Shape {
 
     required property int barHeight
     required property int topBorderWidth
-    required property int sideBorderWidth
-    required property int sideLength
     
     required property int leftGroupWidth
     required property int centerGroupWidth
@@ -21,9 +19,6 @@ Shape {
 
     required property int topAngle
     readonly property double topAngleRad: topAngle * Math.PI / 180
-
-    required property int sideAngle
-    readonly property double sideAngleRad: sideAngle * Math.PI / 180
 
     required property int topGroupTransitionRadius
 
@@ -52,38 +47,12 @@ Shape {
         // Move to bottom right corner
         PathLine {
             relativeX: 0
-            relativeY: root.barHeight + root.sideLength
-        }
-
-        // Shape rigth side
-        PathLine {
-            relativeX: -root.sideBorderWidth * Math.sin(root.sideAngleRad)
-            relativeY: -root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
-        }
-
-        PathArc {
-            relativeX: -root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
-            relativeY: -root.sideBorderWidth * Math.cos(root.sideAngleRad)
-            radiusX: root.sideBorderWidth
-            radiusY: root.sideBorderWidth
-        }
-
-        PathLine {
-            relativeX: 0
-            y: root.barHeight + root.sideBorderWidth
-        }
-
-        PathArc {
-            relativeX: -root.sideBorderWidth
-            relativeY: -root.sideBorderWidth
-            radiusX: root.sideBorderWidth
-            radiusY: root.sideBorderWidth
-            direction: PathArc.Counterclockwise
+            relativeY: root.barHeight
         }
 
         // Cover right group until corner
         PathLine {
-            relativeX: -root.rightGroupWidth + 2 * root.sideBorderWidth
+            relativeX: -root.rightGroupWidth
             relativeY: 0
         }
 
@@ -189,36 +158,10 @@ Shape {
             radiusY: root.topGroupTransitionRadius
         }
 
-        // Cover left group until side
+        // Cover left group until bottom left corner
         PathLine {
-            x: 2 * root.sideBorderWidth
+            x: 0
             relativeY: 0
-        }
-
-        // Shape left side
-        PathArc {
-            relativeX: -root.sideBorderWidth
-            relativeY: root.sideBorderWidth
-            radiusX: root.sideBorderWidth
-            radiusY: root.sideBorderWidth
-            direction: PathArc.Counterclockwise
-        }
-
-        PathLine {
-            relativeX: 0
-            relativeY: root.sideLength - root.sideBorderWidth * (Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad) + Math.cos(root.sideAngleRad) + 1)
-        }
-
-        PathArc {
-            relativeX: -root.sideBorderWidth * (1 - Math.sin(root.sideAngleRad))
-            relativeY: root.sideBorderWidth * Math.cos(root.sideAngleRad)
-            radiusX: root.sideBorderWidth
-            radiusY: root.sideBorderWidth
-        }
-
-        PathLine {
-            relativeX: -root.sideBorderWidth * Math.sin(root.sideAngleRad)
-            relativeY: root.sideBorderWidth * Math.tan(root.sideAngleRad) * Math.sin(root.sideAngleRad)
         }
     }
 
