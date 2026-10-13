@@ -8,11 +8,13 @@ import qs.config
 Item {
     id: root
 
+    // Current value in [0, 100], kept in sync with the outside world
+    required property real value
+    // Called with the new value in [0, 100] while the user drags the circle
     required property var handler
 
     property int sliderWidth: 150
     property int circleWidth: 15
-    property int initPosition: 0
 
     implicitWidth: sliderBar.implicitWidth + sliderCircle.implicitWidth
     implicitHeight: sliderCircle.implicitHeight
@@ -34,7 +36,6 @@ Item {
         id: sliderCircle
 
         anchors.verticalCenter: parent.verticalCenter
-        x: (root.width - width) / 100 * root.initPosition
 
         implicitWidth: root.circleWidth
         implicitHeight: root.circleWidth
@@ -43,14 +44,24 @@ Item {
 
         color: LookAndFeel.color.surface_0
 
+        // Follow the value except while being dragged, so external changes
+        // move the circle without fighting the drag
+        Binding on x {
+            when: !mouseArea.drag.active
+            value: (root.width - sliderCircle.width) * Math.min(Math.max(root.value, 0), 100) / 100
+            restoreMode: Binding.RestoreNone
+        }
+
         onXChanged: {
-            handler(x * 100 / (root.width - width));
+            if (mouseArea.drag.active) {
+                root.handler(x * 100 / (root.width - width));
+            }
         }
 
         Rectangle {
             id: sliderCircleHover
 
-            visible: false
+            visible: mouseArea.containsMouse || mouseArea.drag.active
 
             anchors.centerIn: parent
 
@@ -63,19 +74,13 @@ Item {
         }
 
         MouseArea {
+            id: mouseArea
+
             anchors.fill: parent
 
             enabled: true
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-
-            onEntered: {
-                sliderCircleHover.visible = true;
-            }
-
-            onExited: {
-                sliderCircleHover.visible = false;
-            }
 
             drag.target: sliderCircle
             drag.axis: Drag.XAxis

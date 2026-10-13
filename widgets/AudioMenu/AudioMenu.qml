@@ -60,9 +60,7 @@ PanelWindow {
             bottomMargin: LookAndFeel.spacing.tiny
 
             Slider {
-                Component.onCompleted: {
-                    initPosition = Audio.getVolume();
-                }
+                value: Audio.getVolume()
 
                 handler: (volume) => {
                     Audio.setVolume(volume);
