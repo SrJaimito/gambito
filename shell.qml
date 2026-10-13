@@ -4,6 +4,7 @@ import QtQuick
 
 import qs.config
 import qs.bars.TopBar
+import qs.bars.SecondaryBar
 import qs.widgets.MainMenu
 import qs.widgets.AudioMenu
 
@@ -36,6 +37,26 @@ Scope {
         topGroupTransitionRadius: root.topBarGroupTransitionRadius
 
         shadowMargin: root.shadowMargin
+    }
+
+    // Every other monitor gets a bar showing only its workspaces
+    Variants {
+        model: Quickshell.screens.filter(s => s !== root.screen)
+
+        delegate: SecondaryBar {
+            required property ShellScreen modelData
+
+            screen: modelData
+
+            barHeight: root.topBarHeight
+            topBorderWidth: root.topBarBorderWidth
+
+            topAngle: root.topBarTransitionAngle
+
+            topGroupTransitionRadius: root.topBarGroupTransitionRadius
+
+            shadowMargin: root.shadowMargin
+        }
     }
 
     MainMenu {

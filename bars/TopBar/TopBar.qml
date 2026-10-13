@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Hyprland
 
 import QtQuick
 
@@ -83,6 +84,8 @@ PanelWindow {
 
         Workspaces {
             id: workspaces
+
+            monitor: Hyprland.monitorFor(root.screen)
 
             anchors {
                 verticalCenter: distroLogo.verticalCenter
