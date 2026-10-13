@@ -10,43 +10,69 @@ Shape {
 
     required property Item container
 
-    anchors.fill: container
+    // Extra room on the left and bottom for the shadow to be drawn into
+    required property int shadowMargin
+
+    // Same slant and corner radius as the top bar's group transitions
+    required property int angle
+    readonly property double angleRad: root.angle * Math.PI / 180
+
+    required property int transitionRadius
+
+    readonly property double cornerRelX: root.transitionRadius * Math.sin(root.angleRad)
+    readonly property double cornerRelY: root.transitionRadius * (1 - Math.cos(root.angleRad))
+
+    readonly property double slantRelY: root.container.height - 2 * root.cornerRelY
+    readonly property double slantRelX: root.slantRelY / Math.tan(root.angleRad)
+
+    // Horizontal space taken by the left side, from top to bottom
+    readonly property double slantWidth: 2 * root.cornerRelX + root.slantRelX
+
+    anchors {
+        fill: root.container
+        leftMargin: -root.shadowMargin
+        bottomMargin: -root.shadowMargin
+    }
 
     ShapePath {
-        fillColor: UserConfig.barHighlightColor
+        fillColor: LookAndFeel.color.crust
         strokeWidth: -1
 
-        startX: root.container.width
+        // Start at top left corner, right below the bar
+        startX: root.shadowMargin
         startY: 0
 
-        PathLine {
-            relativeX: -root.container.width
-            relativeY: 0
-        }
-
+        // Bar to left side transition
         PathArc {
-            relativeX: 10
-            relativeY: 10
-            radiusX: 10
-            radiusY: 10
+            relativeX: root.cornerRelX
+            relativeY: root.cornerRelY
+            radiusX: root.transitionRadius
+            radiusY: root.transitionRadius
         }
 
         PathLine {
-            relativeX: 0
-            relativeY: root.container.height - 30
+            relativeX: root.slantRelX
+            relativeY: root.slantRelY
         }
 
         PathArc {
-            relativeX: 20
-            relativeY: 20
-            radiusX: 20
-            radiusY: 20
+            relativeX: root.cornerRelX
+            relativeY: root.cornerRelY
+            radiusX: root.transitionRadius
+            radiusY: root.transitionRadius
             direction: PathArc.Counterclockwise
         }
 
+        // Move to bottom right corner
         PathLine {
-            relativeX: root.container.width
+            x: root.shadowMargin + root.container.width
             relativeY: 0
+        }
+
+        // Move to top right corner
+        PathLine {
+            relativeX: 0
+            y: 0
         }
     }
 
@@ -57,5 +83,3 @@ Shape {
         shadowColor: "black"
     }
 }
-
-

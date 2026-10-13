@@ -1,74 +1,37 @@
-import Quickshell
 import Quickshell.Widgets
 
 import QtQuick
 
 import qs.config
+import qs.components.SlidingMenu
 
 
-PanelWindow {
+SlidingMenu {
     id: root
 
-    required property int barHeight
+    open: UserControl.mainMenuIsVisible
+    onCloseRequested: UserControl.mainMenuIsVisible = false
 
-    readonly property bool open: UserControl.mainMenuIsVisible
+    contentWidth: buttons.implicitWidth + 10
+    contentHeight: buttons.implicitHeight
 
-    anchors {
-        top: true
-        left: true
+    Shape {
+        container: root.contentItem
+        shadowMargin: root.shadowMargin
     }
 
-    // Sit right below the bar instead of being pushed by its exclusive zone
-    exclusionMode: ExclusionMode.Ignore
-    margins.top: barHeight
+    WrapperItem {
+        id: buttons
 
-    implicitWidth: content.width
-    implicitHeight: content.height
+        anchors.verticalCenter: parent.verticalCenter
 
-    // Only mapped while open or sliding out, see the animation below
-    visible: false
-    onOpenChanged: if (open) visible = true
+        leftMargin: LookAndFeel.spacing.small
+        rightMargin: LookAndFeel.spacing.small
+        topMargin: LookAndFeel.spacing.tiny
+        bottomMargin: LookAndFeel.spacing.tiny
 
-    color: "transparent"
-
-    Item {
-        id: content
-
-        implicitWidth: buttons.implicitWidth + 10
-        implicitHeight: buttons.implicitHeight
-
-        // Slide in from the left edge of the screen
-        x: root.open ? 0 : -width
-
-        Shape {
-            container: content
-        }
-
-        WrapperItem {
-            id: buttons
-
-            anchors.verticalCenter: parent.verticalCenter
-
-            leftMargin: LookAndFeel.spacing.small
-            rightMargin: LookAndFeel.spacing.small
-            topMargin: LookAndFeel.spacing.tiny
-            bottomMargin: LookAndFeel.spacing.tiny
-
-            Buttons {
-                spacing: LookAndFeel.spacing.small
-            }
-        }
-
-        Behavior on x {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.OutQuad
-                onStopped: {
-                    if (!root.open) {
-                        root.visible = false;
-                    }
-                }
-            }
+        Buttons {
+            spacing: LookAndFeel.spacing.small
         }
     }
 }

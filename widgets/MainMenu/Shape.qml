@@ -10,7 +10,14 @@ Shape {
 
     required property Item container
 
-    anchors.fill: container
+    // Extra room on the right and bottom for the shadow to be drawn into
+    required property int shadowMargin
+
+    anchors {
+        fill: root.container
+        rightMargin: -root.shadowMargin
+        bottomMargin: -root.shadowMargin
+    }
 
     ShapePath {
         fillColor: UserConfig.barHighlightColor

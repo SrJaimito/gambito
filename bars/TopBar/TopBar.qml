@@ -18,6 +18,8 @@ PanelWindow {
 
     required property int topGroupTransitionRadius
 
+    required property int shadowMargin
+
     readonly property int padding: LookAndFeel.spacing.small
 
     anchors {
@@ -27,7 +29,7 @@ PanelWindow {
     }
 
     // We make the bar bigger to be able to cast shadows
-    implicitHeight: barHeight + LookAndFeel.spacing.huge
+    implicitHeight: root.barHeight + root.shadowMargin
     // but later we reserve space for the actual top bar only
     exclusiveZone: barHeight
 

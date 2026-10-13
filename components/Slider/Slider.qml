@@ -29,7 +29,7 @@ Item {
 
         radius: LookAndFeel.rounding.full
 
-        color: LookAndFeel.color.surface_0
+        color: UserConfig.barHighlightColor
     }
 
     Rectangle {
@@ -42,7 +42,7 @@ Item {
 
         radius: LookAndFeel.rounding.full
 
-        color: LookAndFeel.color.surface_0
+        color: UserConfig.barHighlightColor
 
         // Follow the value except while being dragged, so external changes
         // move the circle without fighting the drag
@@ -70,7 +70,7 @@ Item {
 
             radius: LookAndFeel.rounding.full
 
-            color: UserConfig.barHighlightColor
+            color: LookAndFeel.color.crust
         }
 
         MouseArea {
