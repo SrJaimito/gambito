@@ -55,7 +55,7 @@ WrapperRectangle {
                 fontFamily: LookAndFeel.fontFamily.mono
                 fontSize: LookAndFeel.fontSize.large
 
-                color: Hyprland.focusedWorkspace.id === index + 1 ? root.focusColor : LookAndFeel.color.text
+                color: Hyprland.focusedWorkspace?.id === index + 1 ? root.focusColor : LookAndFeel.color.text
             }
         }
     }

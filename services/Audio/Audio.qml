@@ -10,17 +10,22 @@ Singleton {
 
     property PwNode sink: Pipewire.defaultAudioSink
 
-    property bool isMuted: sink.audio.muted
+    // The default sink can be null, e.g. while PipeWire is starting up
+    property bool isMuted: sink?.audio?.muted ?? false
 
     PwObjectTracker {
-        objects: [sink]
+        objects: root.sink ? [root.sink] : []
     }
 
     function getVolume(): int {
-        return Math.round(sink.audio.volume * 100);
+        return Math.round((sink?.audio?.volume ?? 0) * 100);
     }
 
     function setVolume(volume) {
+        if (!sink?.audio) {
+            return;
+        }
+
         sink.audio.volume = Math.round(volume) / 100;
     }
 }
