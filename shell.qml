@@ -1,3 +1,5 @@
+//@ pragma ShellId gambito
+
 import Quickshell
 
 import QtQuick
@@ -7,6 +9,7 @@ import qs.bars.TopBar
 import qs.bars.SecondaryBar
 import qs.widgets.MainMenu
 import qs.widgets.AudioMenu
+import qs.widgets.SettingsWindow
 
 
 Scope {
@@ -76,6 +79,12 @@ Scope {
         barHeight: root.topBarHeight
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
+        shadowMargin: root.shadowMargin
+    }
+
+    SettingsWindow {
+        screen: root.screen
+
         shadowMargin: root.shadowMargin
     }
 }

@@ -48,7 +48,8 @@ RowLayout {
     CircleButton {
         text: "\uf013"
         onClicked: {
-            // TODO: open the settings menu once it exists
+            UserControl.mainMenuIsVisible = false;
+            UserControl.settingsWindowIsVisible = true;
         }
     }
 

@@ -12,7 +12,7 @@ Singleton {
     readonly property Rounding rounding: Rounding {}
     readonly property Spacing spacing: Spacing {}
 
-    readonly property bool darkMode: true
+    readonly property bool darkMode: UserConfig.darkMode
     readonly property Color color: darkMode ? darkPalette : lightPalette
 
     component FontSize: QtObject {

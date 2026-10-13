@@ -9,5 +9,6 @@ Singleton {
 
     property bool mainMenuIsVisible: false
     property bool audioMenuIsVisible: false
+    property bool settingsWindowIsVisible: false
 }
 
