@@ -13,10 +13,10 @@ WrapperMouseArea {
 
     property alias text: label.text
     
-    property string fgColor: LookAndFeel.color.crust
-    property string bgColor: UserConfig.barHighlightColor
-    property string fgColorHover: UserConfig.barHighlightColor
-    property string bgColorHover: LookAndFeel.color.surface_0
+    property color fgColor: LookAndFeel.color.crust
+    property color bgColor: UserConfig.barHighlightColor
+    property color fgColorHover: UserConfig.barHighlightColor
+    property color bgColorHover: LookAndFeel.color.surface_0
 
     property real radialPadding: 15
 

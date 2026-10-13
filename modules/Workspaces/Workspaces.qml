@@ -16,7 +16,7 @@ WrapperRectangle {
 
     property alias workspaceSpacing: workspaces.spacing
 
-    property string focusColor: UserConfig.barHighlightColor
+    property color focusColor: UserConfig.barHighlightColor
 
     leftMargin: LookAndFeel.spacing.large
     rightMargin: LookAndFeel.spacing.small

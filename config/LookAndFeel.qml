@@ -12,7 +12,7 @@ Singleton {
     readonly property Rounding rounding: Rounding {}
     readonly property Spacing spacing: Spacing {}
 
-    readonly property bool darkMode: false
+    readonly property bool darkMode: true
     readonly property Color color: darkMode ? darkPalette : lightPalette
 
     component FontSize: QtObject {
@@ -42,32 +42,32 @@ Singleton {
     }
 
     component Color: QtObject {
-        property string rosewater
-        property string flamingo
-        property string pink
-        property string mauve
-        property string red
-        property string maroon
-        property string peach
-        property string yellow
-        property string green
-        property string teal
-        property string sky
-        property string sapphire
-        property string blue
-        property string lavender
-        property string text
-        property string subtext_1
-        property string subtext_0
-        property string overlay_2
-        property string overlay_1
-        property string overlay_0
-        property string surface_2
-        property string surface_1
-        property string surface_0
-        property string base
-        property string mantle
-        property string crust
+        property color rosewater
+        property color flamingo
+        property color pink
+        property color mauve
+        property color red
+        property color maroon
+        property color peach
+        property color yellow
+        property color green
+        property color teal
+        property color sky
+        property color sapphire
+        property color blue
+        property color lavender
+        property color text
+        property color subtext_1
+        property color subtext_0
+        property color overlay_2
+        property color overlay_1
+        property color overlay_0
+        property color surface_2
+        property color surface_1
+        property color surface_0
+        property color base
+        property color mantle
+        property color crust
     }
 
     // Light color theme based on Catppuccin Latte (https://catppuccin.com/palette)
@@ -100,7 +100,7 @@ Singleton {
         crust: "#dce0e8"
     }
 
-    // Dark color theme based on Catppuccin Mocha (https://catppuccin.com/palette)
+    // Dark color theme based on Catppuccin Frappé (https://catppuccin.com/palette)
     readonly property Color darkPalette: Color {
         rosewater: "#f2d5cf"
         flamingo: "#eebebe"

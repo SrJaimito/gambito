@@ -3,10 +3,12 @@ pragma Singleton
 
 import Quickshell
 
+import QtQuick
+
 
 Singleton {
     id: root
 
-    property string barHighlightColor: LookAndFeel.color.maroon
+    property color barHighlightColor: LookAndFeel.color.maroon
 }
 
