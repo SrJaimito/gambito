@@ -10,6 +10,7 @@ import qs.bars.TopBar
 import qs.bars.SecondaryBar
 import qs.widgets.MainMenu
 import qs.widgets.AudioMenu
+import qs.widgets.NetworkMenu
 import qs.widgets.SettingsWindow
 
 
@@ -68,6 +69,8 @@ Scope {
 
         bar: topBar
         barHeight: root.topBarHeight
+        barBorderWidth: root.topBarBorderWidth
+        barGroupWidth: topBar.leftGroupWidth
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin
@@ -78,6 +81,20 @@ Scope {
 
         bar: topBar
         barHeight: root.topBarHeight
+        barBorderWidth: root.topBarBorderWidth
+        barGroupWidth: topBar.rightGroupWidth
+        barAngle: root.topBarTransitionAngle
+        barTransitionRadius: root.topBarGroupTransitionRadius
+        shadowMargin: root.shadowMargin
+    }
+
+    NetworkMenu {
+        screen: root.screen
+
+        bar: topBar
+        barHeight: root.topBarHeight
+        barBorderWidth: root.topBarBorderWidth
+        barGroupWidth: topBar.rightGroupWidth
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin

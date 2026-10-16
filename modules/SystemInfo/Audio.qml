@@ -24,6 +24,8 @@ RowLayout {
 
         onClicked: {
             UserControl.audioMenuIsVisible = !UserControl.audioMenuIsVisible;
+            // Both menus slide out at the right edge, so don't stack them
+            UserControl.networkMenuIsVisible = false;
         }
 
         Info {

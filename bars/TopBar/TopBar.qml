@@ -23,6 +23,10 @@ PanelWindow {
 
     readonly property int padding: LookAndFeel.spacing.small
 
+    // Bottom edge lengths of the side groups, for the menus hanging from them
+    readonly property real leftGroupWidth: leftGroup.width
+    readonly property real rightGroupWidth: rightGroup.width + root.padding
+
     anchors {
         top: true
         left: true
@@ -62,9 +66,9 @@ PanelWindow {
         barHeight: root.barHeight
         topBorderWidth: root.topBorderWidth
 
-        leftGroupWidth: leftGroup.width
+        leftGroupWidth: root.leftGroupWidth
         centerGroupWidth: centerGroup.width
-        rightGroupWidth: rightGroup.width + root.padding
+        rightGroupWidth: root.rightGroupWidth
 
         topAngle: root.topAngle
 
