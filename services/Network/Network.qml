@@ -2,74 +2,25 @@ pragma Singleton
 
 
 import Quickshell
-import Quickshell.Io
+import Quickshell.Networking
 
 import QtQuick
 
 
+// Thin adapter over Quickshell.Networking (NetworkManager over D-Bus), so the
+// bar gets pushed updates instead of polling and parsing nmcli output.
 Singleton {
     id: root
 
-    property string type: ""
-    property string wifiName: ""
+    readonly property NetworkDevice wiredDevice: Networking.devices.values.find(
+        dev => dev.type === DeviceType.Wired && dev.connected) ?? null
+    readonly property NetworkDevice wifiDevice: Networking.devices.values.find(
+        dev => dev.type === DeviceType.Wifi && dev.connected) ?? null
+    readonly property WifiNetwork wifiNetwork: wifiDevice?.networks.values.find(
+        net => net.connected) ?? null
 
-    Process {
-        id: getCurrentConnectionType
-
-        command: ["nmcli", "-g", "TYPE,STATE", "dev", "status"]
-        running: true
-        
-        stdout: StdioCollector {
-            onStreamFinished: {
-                let type = ""
-
-                const devices = this.text.split("\n").filter(dev => dev.length > 0);
-                for (let device of devices) {
-                    const info = device.split(":");
-                    const type_info = info[0];
-                    const state_info = info[1];
-
-                    if (state_info === "connected") {
-                        type = `${type_info}`;
-                        if (type === "ethernet") {
-                            break;
-                        }
-                    }
-                }
-
-                root.type = type;
-
-                if (root.type === "wifi") {
-                    getCurrentWifiName.running = true;
-                }
-            }
-        }
-    }
-
-    Process {
-        id: getCurrentWifiName
-
-        command: ["nmcli", "-g", "ACTIVE,SSID", "dev", "wifi"]
-        running: false
-
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const wifi_conns = this.text.split("\n").filter(info => info.length > 0);
-                for (let wifi of wifi_conns) {
-                    const info = wifi.split(":");
-                    if (info[0] === "yes") {
-                        root.wifiName = info[1];
-                    }
-                }
-            }
-        }
-    }
-
-    Timer {
-        interval: 5000
-        running: true
-        repeat: true
-        onTriggered: getCurrentConnectionType.running = true
-    }
+    // Wired wins when both are up, since that's what NetworkManager routes through.
+    readonly property string type: wiredDevice ? "ethernet" : wifiDevice ? "wifi" : ""
+    readonly property string wifiName: type === "wifi" ? (wifiNetwork?.name ?? "") : ""
+    readonly property real signalStrength: wifiNetwork?.signalStrength ?? 0
 }
-
