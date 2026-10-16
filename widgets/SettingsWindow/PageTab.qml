@@ -39,7 +39,7 @@ WrapperMouseArea {
 
             Label {
                 text: root.icon
-                fontFamily: LookAndFeel.fontFamily.mono
+                fontFamily: LookAndFeel.fontFamily.propo
                 color: root.selected ? LookAndFeel.color.crust : UserConfig.barHighlightColor
             }
 

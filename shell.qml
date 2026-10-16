@@ -5,6 +5,7 @@ import Quickshell
 import QtQuick
 
 import qs.config
+import qs.services.Monitors
 import qs.bars.TopBar
 import qs.bars.SecondaryBar
 import qs.widgets.MainMenu
@@ -24,8 +25,8 @@ Scope {
     readonly property int shadowMargin: LookAndFeel.spacing.huge
 
     // Windows without an explicit screen open on whichever monitor has focus
-    // when they are mapped, so pin the bar and its menus to the same one
-    readonly property ShellScreen screen: Quickshell.screens[0]
+    // when they are mapped, so pin the bar and its menus to the primary one
+    readonly property ShellScreen screen: Monitors.primaryScreen
 
     TopBar {
         id: topBar

@@ -19,6 +19,7 @@ PanelWindow {
     // page means creating its file in this directory and listing it here
     readonly property var pages: [
         { title: "Appearance", icon: "\uee26", source: "AppearancePage.qml" },
+        { title: "Monitors", icon: "\uf108", source: "MonitorsPage.qml" },
     ]
 
     // Kept across openings so the window reopens where it was left
