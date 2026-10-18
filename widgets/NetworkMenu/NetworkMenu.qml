@@ -50,7 +50,7 @@ SlidingMenu {
                 Label {
                     Layout.fillWidth: true
 
-                    text: "Wifi"
+                    text: "Wi-Fi"
                 }
 
                 Toggle {
