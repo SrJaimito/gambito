@@ -5,6 +5,8 @@ import qs.config
 import qs.components.SettingRow
 import qs.components.Toggle
 import qs.components.ColorChoice
+import qs.components.WallpaperChoice
+import qs.services.Wallpaper
 
 
 ColumnLayout {
@@ -46,6 +48,32 @@ ColumnLayout {
 
             handler: (name) => {
                 UserConfig.setHighlightColor(name);
+            }
+        }
+    }
+
+    // The carousel needs the full width, so it goes under its row instead of
+    // in the row's control slot
+    ColumnLayout {
+        Layout.fillWidth: true
+
+        spacing: LookAndFeel.spacing.small
+
+        SettingRow {
+            Layout.fillWidth: true
+
+            title: "Wallpaper"
+            description: "Picture shown behind your windows"
+        }
+
+        WallpaperChoice {
+            Layout.fillWidth: true
+
+            folder: Wallpaper.folder
+            selected: Wallpaper.current
+
+            handler: (path) => {
+                Wallpaper.set(path);
             }
         }
     }
