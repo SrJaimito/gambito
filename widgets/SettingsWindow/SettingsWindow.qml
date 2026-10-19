@@ -57,7 +57,7 @@ PanelWindow {
 
         // Fixed size so switching pages doesn't resize and re-center the window
         width: 700
-        height: 500
+        height: 560
 
         anchors.centerIn: parent
 
