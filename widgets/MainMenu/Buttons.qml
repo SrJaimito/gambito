@@ -53,17 +53,19 @@ RowLayout {
         }
     }
 
+    // Hyprland's Lua config turns `hyprctl dispatch <args>` into `hl.dispatch(<args>)`,
+    // so the argument must be a Lua dispatcher call, not the old `exec hyprlock` syntax
     Process {
         id: lock
 
-        command: ["hyprctl", "dispatch", "exec", "hyprlock"]
+        command: ["hyprctl", "dispatch", 'hl.dsp.exec_cmd("hyprlock")']
         running: false
     }
 
     Process {
         id: exit
 
-        command: ["hyprctl", "dispatch", "exit"]
+        command: ["hyprctl", "dispatch", "hl.dsp.exit()"]
         running: false
     }
 
