@@ -119,7 +119,8 @@ PanelWindow {
     // module that opened the menu can still toggle it
     HyprlandFocusGrab {
         active: root.open && root.visible
-        windows: [root, root.bar]
+        // The bar can briefly be missing while the primary screen changes
+        windows: root.bar ? [root, root.bar] : [root]
 
         onCleared: root.closeRequested()
     }

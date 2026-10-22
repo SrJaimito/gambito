@@ -6,8 +6,7 @@ import QtQuick
 
 import qs.config
 import qs.services.Monitors
-import qs.bars.TopBar
-import qs.bars.SecondaryBar
+import qs.bars.Bar
 import qs.widgets.MainMenu
 import qs.widgets.AudioMenu
 import qs.widgets.NetworkMenu
@@ -29,29 +28,22 @@ Scope {
     // when they are mapped, so pin the bar and its menus to the primary one
     readonly property ShellScreen screen: Monitors.primaryScreen
 
-    TopBar {
-        id: topBar
+    // Bar the menus hang from
+    readonly property Bar topBar: bars.instances.find(b => b.primary) ?? null
 
-        screen: root.screen
-
-        barHeight: root.topBarHeight
-        topBorderWidth: root.topBarBorderWidth
-        
-        topAngle: root.topBarTransitionAngle
-
-        topGroupTransitionRadius: root.topBarGroupTransitionRadius
-
-        shadowMargin: root.shadowMargin
-    }
-
-    // Every other monitor gets a bar showing only its workspaces
+    // Every screen gets a bar, showing only its workspaces unless it's the
+    // primary screen. The model doesn't depend on which screen is primary, so
+    // changing it never adds or removes windows, see Bar
     Variants {
-        model: Quickshell.screens.filter(s => s !== root.screen)
+        id: bars
 
-        delegate: SecondaryBar {
+        model: Quickshell.screens
+
+        delegate: Bar {
             required property ShellScreen modelData
 
             screen: modelData
+            primary: modelData === root.screen
 
             barHeight: root.topBarHeight
             topBorderWidth: root.topBarBorderWidth
@@ -67,10 +59,10 @@ Scope {
     MainMenu {
         screen: root.screen
 
-        bar: topBar
+        bar: root.topBar
         barHeight: root.topBarHeight
         barBorderWidth: root.topBarBorderWidth
-        barGroupWidth: topBar.leftGroupWidth
+        barGroupWidth: root.topBar?.leftGroupWidth ?? 0
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin
@@ -79,10 +71,10 @@ Scope {
     AudioMenu {
         screen: root.screen
 
-        bar: topBar
+        bar: root.topBar
         barHeight: root.topBarHeight
         barBorderWidth: root.topBarBorderWidth
-        barGroupWidth: topBar.rightGroupWidth
+        barGroupWidth: root.topBar?.rightGroupWidth ?? 0
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin
@@ -91,10 +83,10 @@ Scope {
     NetworkMenu {
         screen: root.screen
 
-        bar: topBar
+        bar: root.topBar
         barHeight: root.topBarHeight
         barBorderWidth: root.topBarBorderWidth
-        barGroupWidth: topBar.rightGroupWidth
+        barGroupWidth: root.topBar?.rightGroupWidth ?? 0
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
         shadowMargin: root.shadowMargin

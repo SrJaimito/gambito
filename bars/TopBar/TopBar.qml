@@ -9,8 +9,11 @@ import qs.modules.DateTime
 import qs.modules.SystemInfo
 
 
-PanelWindow {
+Item {
     id: root
+
+    // Screen whose workspaces are shown
+    required property ShellScreen screen
 
     required property int barHeight
     required property int topBorderWidth
@@ -19,46 +22,11 @@ PanelWindow {
 
     required property int topGroupTransitionRadius
 
-    required property int shadowMargin
-
     readonly property int padding: LookAndFeel.spacing.small
 
     // Bottom edge lengths of the side groups, for the menus hanging from them
     readonly property real leftGroupWidth: leftGroup.width
     readonly property real rightGroupWidth: rightGroup.width + root.padding
-
-    anchors {
-        top: true
-        left: true
-        right: true
-    }
-
-    // We make the bar bigger to be able to cast shadows
-    implicitHeight: root.barHeight + root.shadowMargin
-    // but later we reserve space for the actual top bar only
-    exclusiveZone: barHeight
-
-    // We must, however, make the part below the actual bar non-clickable
-    mask: Region {
-        item: clickthrough_mask
-        intersection: Intersection.Xor
-    }
-
-    Rectangle {
-        id: clickthrough_mask
-
-        width: root.width
-        height: root.height - root.barHeight
-
-        anchors {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        color: "transparent"
-    }
-
-    color: "transparent"
 
     Shape {
         bar: parent
