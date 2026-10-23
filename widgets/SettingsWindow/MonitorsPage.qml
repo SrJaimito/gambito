@@ -3,6 +3,7 @@ import QtQuick.Layouts
 
 import qs.config
 import qs.components.SettingRow
+import qs.components.CircleButton
 import qs.components.Dropdown
 import qs.components.Label
 import qs.components.TextButton
@@ -22,8 +23,24 @@ ColumnLayout {
 
     readonly property bool modified: root.draft.some(d => {
         const live = Monitors.monitors.find(m => m.name === d.name);
-        return !live || live.x !== d.x || live.y !== d.y;
+        return !live || live.x !== d.x || live.y !== d.y || live.transform !== d.transform;
     })
+
+    // A rotation can leave monitors on top of each other until they are
+    // dragged apart, and Hyprland can't apply that
+    readonly property bool overlapping: root.draft.some((a, i) =>
+        root.draft.some((b, j) => i < j && root.intersects(a, b)))
+
+    function intersects(a, b) {
+        return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+    }
+
+    // Shift everything so the arrangement starts at 0,0
+    function normalized(monitors) {
+        const minX = Math.min(...monitors.map(m => m.x));
+        const minY = Math.min(...monitors.map(m => m.y));
+        return monitors.map(m => Object.assign({}, m, { x: m.x - minX, y: m.y - minY }));
+    }
 
     function resetDraft() {
         root.draft = Monitors.monitors.map(m => Object.assign({}, m));
@@ -58,17 +75,23 @@ ColumnLayout {
         x = Math.round(x);
         y = Math.round(y);
 
-        const overlaps = others.some(o =>
-            x < o.x + o.width && x + moved.width > o.x && y < o.y + o.height && y + moved.height > o.y);
-        if (overlaps) {
+        const placed = Object.assign({}, moved, { x: x, y: y });
+        if (others.some(o => root.intersects(placed, o))) {
             return;
         }
 
-        const placed = root.draft.map((m, i) => i === index ? Object.assign({}, m, { x: x, y: y }) : m);
+        root.draft = root.normalized(root.draft.map((m, i) => i === index ? placed : m));
+    }
 
-        const minX = Math.min(...placed.map(m => m.x));
-        const minY = Math.min(...placed.map(m => m.y));
-        root.draft = placed.map(m => Object.assign({}, m, { x: m.x - minX, y: m.y - minY }));
+    // Turn a monitor 90 degrees clockwise around its top-left corner. Every
+    // step swaps its sides, as Monitors reports rotated sizes. Overlaps are
+    // allowed here, otherwise tight layouts couldn't be rotated at all
+    function rotate(index) {
+        root.draft = root.normalized(root.draft.map((m, i) => i !== index ? m : Object.assign({}, m, {
+            transform: (m.transform + 1) % 4,
+            width: m.height,
+            height: m.width,
+        })));
     }
 
     spacing: LookAndFeel.spacing.normal
@@ -149,7 +172,9 @@ ColumnLayout {
                      : dragArea.containsMouse ? LookAndFeel.color.surface_1
                      : LookAndFeel.color.surface_0
                 border.width: 2
-                border.color: monitor.isPrimary ? UserConfig.barHighlightColor : LookAndFeel.color.overlay_0
+                border.color: root.draft.some((o, i) => i !== monitor.index && root.intersects(monitor.modelData, o))
+                    ? LookAndFeel.color.red
+                    : monitor.isPrimary ? UserConfig.barHighlightColor : LookAndFeel.color.overlay_0
 
                 ColumnLayout {
                     anchors {
@@ -183,7 +208,8 @@ ColumnLayout {
                     Label {
                         Layout.fillWidth: true
 
-                        text: monitor.modelData.resolution
+                        text: monitor.modelData.transform === 0 ? monitor.modelData.resolution
+                            : `${monitor.modelData.resolution} · ${monitor.modelData.transform * 90}°`
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
                         fontSize: LookAndFeel.fontSize.normal - 4
@@ -229,6 +255,20 @@ ColumnLayout {
                         root.drop(monitor.index, x, y, 15 / canvas.factor);
                     }
                 }
+
+                // After the drag area so it takes the clicks over it
+                CircleButton {
+                    anchors {
+                        top: parent.top
+                        right: parent.right
+                        margins: LookAndFeel.spacing.tiny
+                    }
+
+                    visible: !dragArea.pressed
+
+                    text: "\uf01e"
+                    onClicked: root.rotate(monitor.index)
+                }
             }
         }
     }
@@ -241,7 +281,7 @@ ColumnLayout {
         Label {
             Layout.fillWidth: true
 
-            text: "Drag the monitors to arrange them"
+            text: root.overlapping ? "Monitors overlap, drag them apart" : "Drag the monitors to arrange them"
             wrapMode: Text.WordWrap
             fontSize: LookAndFeel.fontSize.normal - 3
             color: LookAndFeel.color.subtext_0
@@ -257,7 +297,7 @@ ColumnLayout {
         TextButton {
             text: "Apply"
 
-            enabled: root.modified
+            enabled: root.modified && !root.overlapping
             onClicked: Monitors.applyPositions(root.draft)
         }
     }
