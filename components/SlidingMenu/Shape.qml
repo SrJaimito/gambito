@@ -24,6 +24,8 @@ Shape {
 
     required property int transitionRadius
 
+    property color color: LookAndFeel.color.crust
+
     readonly property double cornerRelX: root.transitionRadius * Math.sin(root.angleRad)
     readonly property double cornerRelY: root.transitionRadius * (1 - Math.cos(root.angleRad))
 
@@ -46,7 +48,7 @@ Shape {
     }
 
     ShapePath {
-        fillColor: LookAndFeel.color.crust
+        fillColor: root.color
         strokeWidth: -1
 
         // Start at top left corner, right below the bar

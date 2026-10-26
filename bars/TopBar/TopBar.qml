@@ -7,6 +7,7 @@ import qs.config
 import qs.modules.Workspaces
 import qs.modules.DateTime
 import qs.modules.SystemInfo
+import qs.modules.SysTray
 
 
 Item {
@@ -27,6 +28,22 @@ Item {
     // Bottom edge lengths of the side groups, for the menus hanging from them
     readonly property real leftGroupWidth: leftGroup.width
     readonly property real rightGroupWidth: rightGroup.width + root.padding
+
+    // Declared before the bar's shape so the bar and its shadow cover it
+    SysTray {
+        anchors {
+            top: parent.top
+            right: parent.right
+            rightMargin: root.rightGroupWidth
+        }
+
+        barHeight: root.barHeight
+        topBorderWidth: root.topBorderWidth
+
+        topAngle: root.topAngle
+
+        topGroupTransitionRadius: root.topGroupTransitionRadius
+    }
 
     Shape {
         bar: parent
