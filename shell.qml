@@ -11,6 +11,7 @@ import qs.widgets.MainMenu
 import qs.widgets.AudioMenu
 import qs.widgets.NetworkMenu
 import qs.widgets.SettingsWindow
+import qs.widgets.Osd
 
 
 Scope {
@@ -93,6 +94,12 @@ Scope {
     }
 
     SettingsWindow {
+        screen: root.screen
+
+        shadowMargin: root.shadowMargin
+    }
+
+    Osd {
         screen: root.screen
 
         shadowMargin: root.shadowMargin
