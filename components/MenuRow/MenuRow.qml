@@ -6,14 +6,16 @@ import qs.config
 import qs.components.Info
 
 
-// A clickable network entry, highlighted like TextButton while connected
+// A clickable entry for menu lists (networks, audio outputs), highlighted
+// like TextButton while active
 WrapperMouseArea {
     id: root
 
-    required property string icon
+    // Optional, rows without one show just the name
+    property string icon: ""
     required property string name
-    required property bool connected
-    // Connecting or disconnecting, shown dimmed until it settles
+    required property bool active
+    // Changing state (e.g. connecting), shown dimmed until it settles
     required property bool busy
 
     margin: 0
@@ -27,7 +29,7 @@ WrapperMouseArea {
 
         radius: LookAndFeel.rounding.full
 
-        color: root.connected && !root.containsMouse ? UserConfig.barHighlightColor
+        color: root.active && !root.containsMouse ? UserConfig.barHighlightColor
              : root.containsMouse ? LookAndFeel.color.surface_0
              : "transparent"
 
@@ -41,11 +43,12 @@ WrapperMouseArea {
             }
 
             readonly property color textColor: root.busy ? LookAndFeel.color.overlay_0
-                : root.connected && !root.containsMouse ? LookAndFeel.color.crust
-                : root.connected ? UserConfig.barHighlightColor
+                : root.active && !root.containsMouse ? LookAndFeel.color.crust
+                : root.active ? UserConfig.barHighlightColor
                 : LookAndFeel.color.text
 
             icon: root.icon
+            iconVisible: root.icon !== ""
             info: root.name
 
             iconColor: textColor

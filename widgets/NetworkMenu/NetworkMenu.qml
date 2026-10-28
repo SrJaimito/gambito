@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import qs.config
 import qs.components.SlidingMenu
 import qs.components.Label
+import qs.components.MenuRow
 import qs.components.Toggle
 import qs.services.Network
 
@@ -71,14 +72,14 @@ SlidingMenu {
                 color: LookAndFeel.color.surface_2
             }
 
-            NetworkRow {
+            MenuRow {
                 Layout.fillWidth: true
 
                 visible: Network.wiredHasLink && Network.wiredNetwork !== null
 
                 icon: "\u{f0200}"
                 name: "Ethernet"
-                connected: Network.wiredNetwork?.connected ?? false
+                active: Network.wiredNetwork?.connected ?? false
                 busy: Network.wiredNetwork?.stateChanging ?? false
 
                 onClicked: Network.toggle(Network.wiredNetwork)
@@ -87,14 +88,14 @@ SlidingMenu {
             Repeater {
                 model: Network.wifiEnabled ? Network.knownWifiNetworks : []
 
-                delegate: NetworkRow {
+                delegate: MenuRow {
                     required property var modelData
 
                     Layout.fillWidth: true
 
                     icon: ""
                     name: modelData.name
-                    connected: modelData.connected
+                    active: modelData.connected
                     busy: modelData.stateChanging
 
                     onClicked: Network.toggle(modelData)

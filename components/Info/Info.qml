@@ -15,6 +15,7 @@ RowLayout {
     property alias icon: icon.text
     property alias iconSize: icon.fontSize
     property alias iconColor: icon.color
+    property alias iconVisible: icon.visible
 
     property alias info: info.text
     property alias infoSize: info.fontSize
