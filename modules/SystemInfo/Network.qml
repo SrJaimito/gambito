@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.config
+import qs.components.Label
 import qs.components.Info
 import qs.services.Network
 
@@ -28,8 +29,8 @@ RowLayout {
             UserControl.audioMenuIsVisible = false;
         }
 
-        Info {
-            icon: {
+        Label {
+            text: {
                 switch (Network.type) {
                     case "ethernet":
                         return "\u{f0200}"
@@ -37,17 +38,6 @@ RowLayout {
                         return ""
                     default:
                         return "\u{f04b4}"
-                }
-            }
-
-            info: {
-                switch (Network.type) {
-                    case "ethernet":
-                        return "Eth";
-                    case "wifi":
-                        return Network.wifiName;
-                    default:
-                        return "No network";
                 }
             }
         }
