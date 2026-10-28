@@ -58,6 +58,23 @@ Singleton {
         return Quickshell.screens.find(s => s.name === connector) ?? Quickshell.screens[0];
     }
 
+    // Monitors in workspace order: the primary one first, then the rest left
+    // to right and top to bottom. The i-th one gets workspace i
+    readonly property var workspaceOrder: {
+        const others = root.monitors
+            .filter(m => m.name !== root.primaryName)
+            .sort((a, b) => a.x - b.x || a.y - b.y);
+        const primary = root.monitors.filter(m => m.name === root.primaryName);
+        return primary.concat(others).map(m => m.name);
+    }
+
+    onWorkspaceOrderChanged: workspaceDebounce.restart()
+
+    // Quotes a string for Lua
+    function quote(s) {
+        return `"${s.replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}"`;
+    }
+
     // Move the monitors to the given positions ([{ name, x, y, transform }],
     // in logical pixels) and save them as the layout for this set of monitors
     function applyPositions(positions) {
@@ -81,12 +98,10 @@ Singleton {
 
     function move(positions) {
         // Monitors are matched by description, as connector names can change
-        // between plugs. Strings are escaped to be quoted in Lua
-        const quote = (s) => `"${s.replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}"`;
-
+        // between plugs
         const calls = positions.map(p => {
             const scale = root.monitors.find(m => m.name === p.name)?.scale ?? 1;
-            return `hl.monitor({ output = ${quote("desc:" + p.name)}, mode = "preferred", `
+            return `hl.monitor({ output = ${root.quote("desc:" + p.name)}, mode = "preferred", `
                  + `position = "${p.x}x${p.y}", scale = ${scale}, transform = ${p.transform} })`;
         });
 
@@ -109,6 +124,66 @@ Singleton {
         if (moved) {
             root.move(layout.monitors);
         }
+    }
+
+    // Pin workspace i to the i-th monitor of workspaceOrder, with rules for
+    // when it's created later and moving it there if it already exists
+    function applyWorkspaces() {
+        const order = root.workspaceOrder;
+        if (order.length === 0) {
+            return;
+        }
+
+        // Rules can't be removed, only disabled, so keep their handles in a
+        // Lua global (it survives between evals) and reuse them, or every
+        // call would add another copy
+        const calls = [
+            "gambito_ws_rules = gambito_ws_rules or {}",
+            "for _, r in pairs(gambito_ws_rules) do r:set_enabled(false) end",
+            "local function pin(ws, mon) "
+                + "local key = ws .. '|' .. mon "
+                + "if gambito_ws_rules[key] then gambito_ws_rules[key]:set_enabled(true) "
+                + "else gambito_ws_rules[key] = hl.workspace_rule({ workspace = ws, monitor = mon, default = true }) end "
+                + "end",
+        ];
+
+        order.forEach((name, i) => {
+            const workspace = `"${i + 1}"`;
+            const output = root.quote("desc:" + name);
+            calls.push(`pin(${workspace}, ${output})`);
+
+            const connector = root.monitors.find(m => m.name === name)?.connector;
+            const existing = Hyprland.workspaces.values.find(w => w.id === i + 1);
+            if (existing && existing.monitor?.name !== connector) {
+                calls.push(`hl.dispatch(hl.dsp.workspace.move({ workspace = ${workspace}, monitor = ${output} }))`);
+            }
+        });
+
+        workspaceCtl.command = ["hyprctl", "eval", calls.join("\n")];
+        workspaceCtl.running = true;
+    }
+
+    // Separate from hyprctl so a layout move in flight isn't overwritten
+    Process {
+        id: workspaceCtl
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (this.text.trim() !== "ok") {
+                    console.warn("Monitors: workspace hyprctl eval failed:", this.text.trim());
+                }
+            }
+        }
+    }
+
+    // The order flips through intermediate values while monitors and the
+    // saved layout load, so only act once it has settled
+    Timer {
+        id: workspaceDebounce
+
+        interval: 300
+
+        onTriggered: root.applyWorkspaces()
     }
 
     Process {
@@ -135,6 +210,9 @@ Singleton {
         function onRawEvent(event) {
             if (event.name.startsWith("monitoradded") || event.name.startsWith("monitorremoved")) {
                 settle.restart();
+            } else if (event.name === "configreloaded") {
+                // Reloading drops the rules added at runtime
+                workspaceDebounce.restart();
             }
         }
     }
@@ -157,6 +235,10 @@ Singleton {
 
         interval: 300
 
-        onTriggered: root.restoreLayout()
+        onTriggered: {
+            root.restoreLayout();
+            // Workspaces may have been left on the wrong monitor by the plug
+            workspaceDebounce.restart();
+        }
     }
 }
