@@ -8,6 +8,7 @@ import qs.modules.Workspaces
 import qs.modules.DateTime
 import qs.modules.SystemInfo
 import qs.modules.SysTray
+import qs.modules.NotificationTray
 
 
 Item {
@@ -28,6 +29,10 @@ Item {
     // Bottom edge lengths of the side groups, for the menus hanging from them
     readonly property real leftGroupWidth: leftGroup.width
     readonly property real rightGroupWidth: rightGroup.width + root.padding
+    // The left group extended by the notification tray, for the notification
+    // menu, so it slides out next to the tray instead of covering it
+    readonly property real notificationGroupWidth: root.leftGroupWidth
+        + (notificationTray.visible ? notificationTray.width - notificationTray.slantWidth : 0)
 
     // Declared before the bar's shape so the bar and its shadow cover it
     SysTray {
@@ -35,6 +40,23 @@ Item {
             top: parent.top
             right: parent.right
             rightMargin: root.rightGroupWidth
+        }
+
+        barHeight: root.barHeight
+        topBorderWidth: root.topBorderWidth
+
+        topAngle: root.topAngle
+
+        topGroupTransitionRadius: root.topGroupTransitionRadius
+    }
+
+    NotificationTray {
+        id: notificationTray
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            leftMargin: root.leftGroupWidth
         }
 
         barHeight: root.barHeight

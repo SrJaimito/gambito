@@ -16,6 +16,8 @@ Singleton {
     readonly property alias highlightColor: settings.highlightColor
     // Monitor arrangements, one per set of connected monitors. See setMonitorLayout
     readonly property alias monitorLayouts: settings.monitorLayouts
+    // Collect notifications without popping them up
+    readonly property alias doNotDisturb: settings.doNotDisturb
 
     // Accent color, stored as a palette name so it follows the light/dark mode
     readonly property color barHighlightColor: LookAndFeel.color[root.highlightColor]
@@ -26,6 +28,10 @@ Singleton {
 
     function setHighlightColor(name: string) {
         settings.highlightColor = name;
+    }
+
+    function setDoNotDisturb(doNotDisturb: bool) {
+        settings.doNotDisturb = doNotDisturb;
     }
 
     // Store a layout ({ monitors: [{ name, transform, x, y }], primaryMonitor }),
@@ -70,6 +76,7 @@ Singleton {
             property bool darkMode: true
             property string highlightColor: "maroon"
             property var monitorLayouts: []
+            property bool doNotDisturb: false
         }
     }
 }

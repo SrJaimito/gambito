@@ -14,7 +14,11 @@ WrapperMouseArea {
 
     enabled: true
     cursorShape: Qt.PointingHandCursor
-    onClicked: UserControl.mainMenuIsVisible = !UserControl.mainMenuIsVisible;
+    onClicked: {
+        UserControl.mainMenuIsVisible = !UserControl.mainMenuIsVisible;
+        // Both menus hang from the left group, so don't stack them
+        UserControl.notificationMenuIsVisible = false;
+    }
 
     WrapperRectangle {
         id: circle

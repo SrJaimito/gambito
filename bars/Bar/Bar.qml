@@ -29,6 +29,7 @@ PanelWindow {
     // hanging from them
     readonly property real leftGroupWidth: topBar.leftGroupWidth
     readonly property real rightGroupWidth: topBar.rightGroupWidth
+    readonly property real notificationGroupWidth: topBar.notificationGroupWidth
 
     anchors {
         top: true

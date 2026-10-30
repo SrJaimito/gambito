@@ -45,6 +45,17 @@ RowLayout {
         color: LookAndFeel.color.surface_2
     }
 
+    // Do Not Disturb, drawn inverted while on. Leaves the menu open so the
+    // change can be seen
+    CircleButton {
+        text: UserConfig.doNotDisturb ? "\u{f009b}" : "\u{f009a}"
+
+        fgColor: UserConfig.doNotDisturb ? UserConfig.barHighlightColor : LookAndFeel.color.crust
+        bgColor: UserConfig.doNotDisturb ? LookAndFeel.color.surface_0 : UserConfig.barHighlightColor
+
+        onClicked: UserConfig.setDoNotDisturb(!UserConfig.doNotDisturb)
+    }
+
     CircleButton {
         text: "\uf013"
         onClicked: {
