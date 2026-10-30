@@ -25,9 +25,17 @@ Item {
 
     readonly property int padding: LookAndFeel.spacing.tiny
 
-    // Own slanted side plus the part hidden under the next group's one, which
-    // has the same height and angle
-    implicitWidth: 2 * shape.slantWidth + 2 * root.padding + icons.implicitWidth
+    // Both slanted sides (the strip's own and the next group's, same angle)
+    // lean left going up, so near the icons they're much closer than a full
+    // slant width. Measure the padding from where each side actually is: the
+    // strip's at the icons' bottom, the group's at their top, the points
+    // closest to them
+    readonly property real cotAngle: 1 / Math.tan(root.topAngle * Math.PI / 180)
+    readonly property real iconsTop: root.topBorderWidth + (root.barHeight - root.topBorderWidth - icons.implicitHeight) / 2
+    readonly property real iconsBottom: root.iconsTop + icons.implicitHeight
+
+    implicitWidth: icons.x + icons.implicitWidth + root.padding
+        + shape.cornerRelX + (root.barHeight - shape.cornerRelY - root.iconsTop) * root.cotAngle
     implicitHeight: root.barHeight
 
     visible: SystemTray.items.values.length > 0
@@ -49,9 +57,9 @@ Item {
     RowLayout {
         id: icons
 
-        x: shape.slantWidth + root.padding
+        x: shape.cornerRelX + (root.iconsBottom - shape.cornerRelY) * root.cotAngle + root.padding
         // Centered in the band left visible below the border
-        y: root.topBorderWidth + (root.barHeight - root.topBorderWidth - height) / 2
+        y: root.iconsTop
 
         spacing: LookAndFeel.spacing.small
 
