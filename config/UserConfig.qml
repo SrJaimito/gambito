@@ -13,6 +13,7 @@ Singleton {
     // Stored choices, saved to a JSON file in the shell's data directory.
     // Change them through the setters below so they get written to disk
     readonly property alias darkMode: settings.darkMode
+    readonly property alias darkPalette: settings.darkPalette
     readonly property alias highlightColor: settings.highlightColor
     // Monitor arrangements, one per set of connected monitors. See setMonitorLayout
     readonly property alias monitorLayouts: settings.monitorLayouts
@@ -22,6 +23,10 @@ Singleton {
 
     function setDarkMode(darkMode: bool) {
         settings.darkMode = darkMode;
+    }
+
+    function setDarkPalette(name: string) {
+        settings.darkPalette = name;
     }
 
     function setHighlightColor(name: string) {
@@ -68,6 +73,7 @@ Singleton {
             id: settings
 
             property bool darkMode: true
+            property string darkPalette: "Frappé"
             property string highlightColor: "maroon"
             property var monitorLayouts: []
         }

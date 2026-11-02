@@ -5,6 +5,7 @@ import qs.config
 import qs.components.SettingRow
 import qs.components.Toggle
 import qs.components.ColorChoice
+import qs.components.Dropdown
 import qs.components.WallpaperChoice
 import qs.services.Wallpaper
 
@@ -25,6 +26,27 @@ ColumnLayout {
 
             handler: (checked) => {
                 UserConfig.setDarkMode(checked);
+            }
+        }
+    }
+
+    SettingRow {
+        Layout.fillWidth: true
+
+        // Above the rows below, which the unfolded list is drawn over
+        z: 1
+
+        visible: UserConfig.darkMode
+
+        title: "Dark palette"
+        description: "Catppuccin flavor used in dark mode"
+
+        Dropdown {
+            options: Object.keys(LookAndFeel.darkPalettes)
+            selected: UserConfig.darkPalette in LookAndFeel.darkPalettes ? UserConfig.darkPalette : "Frappé"
+
+            handler: (name) => {
+                UserConfig.setDarkPalette(name);
             }
         }
     }
