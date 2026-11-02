@@ -12,8 +12,6 @@ import qs.widgets.AudioMenu
 import qs.widgets.NetworkMenu
 import qs.widgets.SettingsWindow
 import qs.widgets.Osd
-import qs.widgets.NotificationPopup
-import qs.widgets.NotificationMenu
 
 
 Scope {
@@ -92,26 +90,6 @@ Scope {
         barGroupWidth: root.topBar?.rightGroupWidth ?? 0
         barAngle: root.topBarTransitionAngle
         barTransitionRadius: root.topBarGroupTransitionRadius
-        shadowMargin: root.shadowMargin
-    }
-
-    NotificationMenu {
-        screen: root.screen
-
-        bar: root.topBar
-        barHeight: root.topBarHeight
-        barBorderWidth: root.topBarBorderWidth
-        barGroupWidth: root.topBar?.notificationGroupWidth ?? 0
-        barAngle: root.topBarTransitionAngle
-        barTransitionRadius: root.topBarGroupTransitionRadius
-        shadowMargin: root.shadowMargin
-    }
-
-    // Also what starts the notification server, as soon as the shell does
-    NotificationPopup {
-        screen: root.screen
-
-        barHeight: root.topBarHeight
         shadowMargin: root.shadowMargin
     }
 
