@@ -12,6 +12,7 @@ import qs.widgets.AudioMenu
 import qs.widgets.NetworkMenu
 import qs.widgets.SettingsWindow
 import qs.widgets.Osd
+import qs.widgets.Screenshot
 
 
 Scope {
@@ -102,6 +103,11 @@ Scope {
     Osd {
         screen: root.screen
 
+        shadowMargin: root.shadowMargin
+    }
+
+    // Not pinned to the primary screen: it captures the focused monitor
+    Screenshot {
         shadowMargin: root.shadowMargin
     }
 }

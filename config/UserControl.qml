@@ -11,5 +11,6 @@ Singleton {
     property bool audioMenuIsVisible: false
     property bool networkMenuIsVisible: false
     property bool settingsWindowIsVisible: false
+    property bool screenshotIsActive: false
 }
 
